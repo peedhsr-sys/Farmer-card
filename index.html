@@ -21,12 +21,12 @@
 			width: 220pt;
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
 			font-size: 8pt;
-			margin-top: 2px;
 		}
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
 			padding: 2px 4px;
 			text-align: center;
+			position: relative;
 		}
 		.land-table th {
 			font-weight: bold;
@@ -38,10 +38,33 @@
 		.land-table td:focus {
 			background-color: #e8f4e8;
 		}
+		/* Delete button on row hover */
+		.delete-row-btn {
+			display: none;
+			position: absolute;
+			right: -18px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: #d9534f;
+			color: white;
+			border: none;
+			border-radius: 50%;
+			width: 15px;
+			height: 15px;
+			font-size: 9px;
+			font-weight: bold;
+			line-height: 14px;
+			text-align: center;
+			cursor: pointer;
+			z-index: 10;
+		}
+		.land-table tr:hover .delete-row-btn {
+			display: block;
+		}
 	</style>
 </head>
 <body>
-	<div style="position:relative; border:solid 1pt black; margin:10pt auto 10pt auto; overflow:hidden; width:595.25pt; height:255pt;"><a name="Page1" id="Page1"/>
+	<div id="cardContainer" style="position:relative; border:solid 1pt black; margin:10pt auto 10pt auto; overflow:visible; width:595.25pt; height:255pt;"><a name="Page1" id="Page1"/>
 		<div style="position:absolute; left:34pt; top:34pt">
 			<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" />
 		</div>
@@ -51,7 +74,7 @@
 		<div style="position:absolute; left:51.25pt; top:76pt">
 			<img style="position:absolute; width:51pt; height:60.7pt" src="photo.jpeg" />
 		</div>
-		<div style="position:absolute; left:441.5pt; top:185.85pt">
+		<div id="iconImage4" style="position:absolute; left:441.5pt; top:185.85pt; transition: top 0.2s;">
 			<img style="position:absolute; width:9pt; height:9pt" src="image4.png" />
 		</div>
 
@@ -116,25 +139,25 @@
 					<tr>
 						<td contenteditable="true">26</td>
 						<td contenteditable="true">33</td>
-						<td contenteditable="true">0.0141</td>
+						<td contenteditable="true">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 
-		<!-- Bottom Section: Farmer ID & Registry (Editable ID) -->
-		<div id="footerSection" style="position:absolute; left:100pt; top:160pt; transition: top 0.2s;">
-			<div style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold;">
-				Farmer ID : <span class="editable-field" contenteditable="true">4764 1358 808</span>
-			</div>
-			<div style="margin-top:6px;">
-				<span style="font-size:12.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Uttar Pradesh Farmer Registry</span>
-				<span style="font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#333333; font-weight:bold; margin-left:110pt;">www.upfr.agristack.gov.in</span>
-			</div>
+		<!-- Bottom Footer Sections (Restored to exact original positions + dynamic shift) -->
+		<div id="farmerIdSection" style="position:absolute; left:100pt; top:162.95pt; transition: top 0.2s;">
+			<span style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold;">Farmer ID : <span class="editable-field" contenteditable="true">4764 1358 808</span></span>
+		</div>
+		<div id="registryTitleSection" style="position:absolute; left:100.6pt; top:184.55pt; transition: top 0.2s;">
+			<span style="font-size:12.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Uttar Pradesh Farmer Registry</span>
+		</div>
+		<div id="websiteSection" style="position:absolute; left:100.6pt; top:185.85pt; transition: top 0.2s;">
+			<span style="position:absolute; white-space:pre; font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#333333; font-weight:bold; left:355.9pt">www.upfr.agristack.gov.in</span>
 		</div>
 	</div>
 
-	<!-- Script to Handle Dynamic Table Row Addition on Enter Key -->
+	<!-- Script to Handle Dynamic Table Row Addition, Deletion, and Spacing Adjustment -->
 	<script>
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
@@ -144,18 +167,16 @@
 					const currentRow = targetCell.parentElement;
 					const tbody = currentRow.parentElement;
 					
-					// Check if it's the last row
 					if (currentRow === tbody.lastElementChild) {
 						const newRow = document.createElement('tr');
 						newRow.innerHTML = `
 							<td contenteditable="true"></td>
 							<td contenteditable="true"></td>
-							<td contenteditable="true"></td>
+							<td contenteditable="true"><button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						`;
 						tbody.appendChild(newRow);
 						newRow.firstElementChild.focus();
 					} else {
-						// Move focus to next row's same column or first column
 						const nextRow = currentRow.nextElementSibling;
 						const colIndex = Array.from(currentRow.children).indexOf(targetCell);
 						if (nextRow.children[colIndex]) {
@@ -167,17 +188,42 @@
 			}
 		});
 
+		function deleteRow(btn) {
+			const row = btn.closest('tr');
+			const tbody = row.parentElement;
+			if (tbody.rows.length > 1) {
+				row.remove();
+			} else {
+				// If only 1 row left, just clear its inputs instead of deleting
+				const cells = row.querySelectorAll('td');
+				cells[0].innerText = '';
+				cells[1].innerText = '';
+				cells[2].innerHTML = '<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button>';
+			}
+			adjustSpacing();
+		}
+
 		function adjustSpacing() {
 			const table = document.getElementById('landDetailsTable');
-			const footer = document.getElementById('footerSection');
+			const farmerIdSec = document.getElementById('farmerIdSection');
+			const registrySec = document.getElementById('registryTitleSection');
+			const websiteSec = document.getElementById('websiteSection');
+			const iconImg4 = document.getElementById('iconImage4');
+			const cardContainer = document.getElementById('cardContainer');
+			
 			const rowCount = table.rows.length;
 			
-			// Adjust footer top position if table gets larger
-			if (rowCount > 3) {
-				footer.style.top = (160 + (rowCount - 3) * 12) + 'pt';
-			} else {
-				footer.style.top = '160pt';
+			// Dynamic shift downward when additional table rows are added
+			let extraOffset = 0;
+			if (rowCount > 1) {
+				extraOffset = (rowCount - 1) * 16;
 			}
+			
+			farmerIdSec.style.top = (162.95 + extraOffset) + 'pt';
+			registrySec.style.top = (184.55 + extraOffset) + 'pt';
+			websiteSec.style.top = (185.85 + extraOffset) + 'pt';
+			iconImg4.style.top = (185.85 + extraOffset) + 'pt';
+			cardContainer.style.height = (255 + extraOffset) + 'pt';
 		}
 	</script>
 </body>

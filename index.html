@@ -72,9 +72,13 @@
 		<div style="position:absolute; left:244.5pt; top:130pt">
 			<img style="position:absolute; width:43.85pt; height:43.85pt" src="barcode.png" />
 		</div>
+		
+		<!-- Photo Upload Section -->
 		<div style="position:absolute; left:51.25pt; top:76pt">
-			<img style="position:absolute; width:51pt; height:60.7pt" src="photo.jpeg" />
+			<input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
+			<img id="profilePhoto" style="position:absolute; width:51pt; height:60.7pt; cursor:pointer;" src="photo.jpeg" onclick="document.getElementById('photoUpload').click();" />
 		</div>
+		
 		<div style="position:absolute; left:441.5pt; top:185.85pt">
 			<img style="position:absolute; width:9pt; height:9pt" src="image4.png" />
 		</div>
@@ -113,7 +117,7 @@
 
 		<div style="position:absolute; left:120.25pt; top:119.6pt;">
 			<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Aadhaar: </span>
-			<span class="editable-field" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">282063510402</span>
+			<span class="editable-field" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">[Aadhaar Redacted]</span>
 		</div>
 
 		<!-- Right Column: Address (Editable) -->
@@ -160,6 +164,18 @@
 
 	<!-- Script to Handle Dynamic Table Row Addition, Deletion and Auto-Scaling -->
 	<script>
+		// Image Upload Script
+		function previewImage(event) {
+			const reader = new FileReader();
+			reader.onload = function() {
+				const output = document.getElementById('profilePhoto');
+				output.src = reader.result;
+			};
+			if(event.target.files[0]) {
+				reader.readAsDataURL(event.target.files[0]);
+			}
+		}
+
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();

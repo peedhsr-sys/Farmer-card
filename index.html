@@ -57,7 +57,6 @@
 			width: 232pt;
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
 			font-size: 8pt;
-			transition: font-size 0.2s;
 			table-layout: fixed;
 		}
 		.land-table th, .land-table td {
@@ -70,7 +69,7 @@
 		}
 		.land-table th {
 			font-weight: bold;
-			background-color: transparent; /* ग्रे बैकग्राउंड हटा दिया गया */
+			background-color: transparent;
 		}
 		.land-table td {
 			outline: none;
@@ -250,7 +249,7 @@
 
 			<div style="position:absolute; left:120.25pt; top:119.6pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Aadhaar: </span>
-				<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">809055326085</span>
+				<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">[Aadhaar Redacted]</span>
 			</div>
 
 			<!-- Right Column: Address (Editable) -->
@@ -502,12 +501,19 @@
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();
-				const targetCell = e.target;
-				if (targetCell.tagName === 'TD') {
-					const currentRow = targetCell.parentElement;
-					const tbody = currentRow.parentElement;
-					
-					if (currentRow === tbody.lastElementChild) {
+				let targetCell = e.target;
+				const currentRow = targetCell.closest('tr');
+				const tbody = currentRow.parentElement;
+				const isSummaryRow = currentRow.classList.contains('summary-row');
+
+				if (isSummaryRow) {
+					return;
+				}
+
+				if (currentRow === tbody.lastElementChild) {
+					const dataRowCount = tbody.querySelectorAll('tr:not(.summary-row)').length;
+
+					if (dataRowCount < 4) {
 						const newRow = document.createElement('tr');
 						newRow.innerHTML = `
 							<td contenteditable="true"></td>
@@ -526,15 +532,34 @@
 						lastCell.appendChild(delBtn);
 						
 						newRow.firstElementChild.focus();
+					} else if (dataRowCount === 4 && !tbody.querySelector('.summary-row')) {
+						const sumRow = document.createElement('tr');
+						sumRow.className = 'summary-row';
+						sumRow.innerHTML = `
+							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px;">
+								Number of Lands Owned : <span class="editable-field" contenteditable="true">4</span>
+							</td>
+							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px; position:relative;">
+								Total Land Area Owned : <span class="editable-field" contenteditable="true">0.0826</span>
+								<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button>
+							</td>
+						`;
+						tbody.appendChild(sumRow);
+						sumRow.querySelector('.editable-field').focus();
+					}
+				} else {
+					const nextRow = currentRow.nextElementSibling;
+					if (nextRow.classList.contains('summary-row')) {
+						const editable = nextRow.querySelector('.editable-field');
+						if (editable) editable.focus();
 					} else {
-						const nextRow = currentRow.nextElementSibling;
-						const colIndex = Array.from(currentRow.children).indexOf(targetCell);
+						const colIndex = Array.from(currentRow.children).indexOf(targetCell.tagName === 'TD' ? targetCell : targetCell.closest('td'));
 						if (nextRow.children[colIndex]) {
 							nextRow.children[colIndex].focus();
 						}
 					}
-					autoFitTable();
 				}
+				autoFitTable();
 			}
 		});
 
@@ -555,18 +580,9 @@
 		}
 
 		function autoFitTable() {
+			// टेबल की साइज़ फिक्स रखने के लिए कोई बदलाव नहीं किया जाएगा
 			const table = document.getElementById('landDetailsTable');
-			const rowCount = table.rows.length;
-			if (rowCount > 4) {
-				table.style.fontSize = '6.5pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 1px');
-			} else if (rowCount > 2) {
-				table.style.fontSize = '7.2pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 2px');
-			} else {
-				table.style.fontSize = '8pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '3px 2px');
-			}
+			table.style.fontSize = '8pt';
 		}
 
 		// --- QR Code Management ---

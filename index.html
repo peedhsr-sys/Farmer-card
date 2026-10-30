@@ -8,6 +8,24 @@
 	<!-- QR Code Library CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 	<style>
+		/* General Styling */
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #f4f4f4; /* Light background for the page outside the card */
+		}
+		
+		/* The main ID card container */
+		.id-card-container {
+			position: relative; 
+			border: solid 1pt black; 
+			margin: 10pt auto; 
+			overflow: hidden; 
+			width: 595.25pt; 
+			height: 255pt;
+			background-color: white; /* Ensure card background is white */
+		}
+
 		.editable-field {
 			outline: none;
 			border: 1px dashed transparent;
@@ -17,6 +35,7 @@
 			border: 1px dashed #006300;
 			background-color: #f9f9f9;
 		}
+		
 		/* Dynamic Land Details Table Styling */
 		.land-table {
 			border-collapse: collapse;
@@ -41,6 +60,7 @@
 		.land-table td:focus {
 			background-color: #e8f4e8;
 		}
+		
 		/* Delete button strictly inside table cell */
 		.delete-row-btn {
 			display: none;
@@ -84,25 +104,35 @@
 			height: 100% !important;
 			object-fit: contain;
 		}
+
+		/* Drag and Drop visual cue */
+		body.dragover .id-card-container {
+			border: 2px dashed #006300;
+			opacity: 0.8;
+		}
 	</style>
 </head>
 <body>
-	<div style="position:relative; border:solid 1pt black; margin:10pt auto 10pt auto; overflow:hidden; width:595.25pt; height:255pt;"><a name="Page1" id="Page1"/>
+	<div class="id-card-container" id="cardContainer">
+		<a name="Page1" id="Page1"></a>
+		
+		<!-- Background Image -->
 		<div style="position:absolute; left:34pt; top:34pt">
-			<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" />
+			<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" alt="Background" />
 		</div>
 		
 		<!-- Dynamic HD QR Code Section -->
 		<div id="qrcode"></div>
 		
-		<!-- Photo Upload Section -->
-		<div style="position:absolute; left:51.25pt; top:76pt">
+		<!-- Photo Upload Section (Click, Paste, Drag & Drop) -->
+		<div style="position:absolute; left:51.25pt; top:76pt; z-index: 20;" id="photoContainer">
 			<input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
-			<img id="profilePhoto" style="position:absolute; width:51pt; height:60.7pt; cursor:pointer;" src="photo.jpeg" onclick="document.getElementById('photoUpload').click();" />
+			<img id="profilePhoto" style="position:absolute; width:51pt; height:60.7pt; cursor:pointer;" src="photo.jpeg" onclick="document.getElementById('photoUpload').click();" title="Click to upload, Paste (Ctrl+V), or Drag & Drop" alt="Profile Photo" />
 		</div>
 		
+		<!-- Small Icon -->
 		<div style="position:absolute; left:441.5pt; top:185.85pt">
-			<img style="position:absolute; width:9pt; height:9pt" src="image4.png" />
+			<img style="position:absolute; width:9pt; height:9pt" src="image4.png" alt="Icon" />
 		</div>
 
 		<!-- Header -->
@@ -185,36 +215,61 @@
 	</div>
 
 	<script>
-		// --- 1. Image Upload Script ---
-		function previewImage(event) {
-			const reader = new FileReader();
-			reader.onload = function() {
-				const output = document.getElementById('profilePhoto');
-				output.src = reader.result;
-			};
-			if(event.target.files[0]) {
-				reader.readAsDataURL(event.target.files[0]);
+		// --- 1. Common Function to Update Image ---
+		function updateProfileImage(fileOrBlob) {
+			// Basic validation to check if it's an image
+			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
+				const reader = new FileReader();
+				reader.onload = function(event) {
+					document.getElementById('profilePhoto').src = event.target.result;
+				};
+				reader.readAsDataURL(fileOrBlob);
 			}
 		}
 
-		// --- NEW: Copy-Paste Image Script ---
+		// --- 2. Click to Upload Script ---
+		function previewImage(event) {
+			if(event.target.files && event.target.files[0]) {
+				updateProfileImage(event.target.files[0]);
+			}
+		}
+
+		// --- 3. Global Copy-Paste (Ctrl+V or Right-Click Paste) Script ---
 		document.addEventListener('paste', function(e) {
 			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
 			for (let i = 0; i < items.length; i++) {
 				if (items[i].type.indexOf('image') !== -1) {
 					const blob = items[i].getAsFile();
-					const reader = new FileReader();
-					reader.onload = function(event) {
-						// Set the pasted image to the profile photo element
-						document.getElementById('profilePhoto').src = event.target.result;
-					};
-					reader.readAsDataURL(blob);
+					updateProfileImage(blob);
 					e.preventDefault(); // Prevent default paste behavior
+					return; // Stop after finding the first image
 				}
 			}
 		});
 
-		// --- 2. Dynamic Table Script ---
+		// --- 4. Drag and Drop Script ---
+		const dropZone = document.body; // Allows dropping anywhere on the page
+
+		dropZone.addEventListener('dragover', (e) => {
+			e.preventDefault(); // Necessary to allow dropping
+			document.body.classList.add('dragover'); // Add visual cue
+		});
+
+		dropZone.addEventListener('dragleave', (e) => {
+			e.preventDefault();
+			document.body.classList.remove('dragover'); // Remove visual cue
+		});
+
+		dropZone.addEventListener('drop', (e) => {
+			e.preventDefault();
+			document.body.classList.remove('dragover');
+			
+			if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+				updateProfileImage(e.dataTransfer.files[0]);
+			}
+		});
+
+		// --- 5. Dynamic Table Script ---
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();
@@ -283,7 +338,7 @@
 			}
 		}
 
-		// --- 3. Real-Time HD QR Code Script ---
+		// --- 6. Real-Time HD QR Code Script ---
 		let qrCodeInstance = null;
 
 		function getCleanText(el) {

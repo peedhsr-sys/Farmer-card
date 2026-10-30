@@ -64,10 +64,25 @@
 		.land-table tr:hover .delete-row-btn {
 			display: block;
 		}
-		/* Make QR Code fit perfectly and in HD */
+		
+		/* HD QR Code strictly fixed to original size */
+		#qrcode {
+			position: absolute; 
+			left: 244.5pt; 
+			top: 130pt; 
+			width: 43.85pt; 
+			height: 43.85pt; 
+			background: #fff; 
+			padding: 1pt;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+		}
 		#qrcode img, #qrcode canvas {
 			width: 100% !important;
 			height: 100% !important;
+			object-fit: contain;
 		}
 	</style>
 </head>
@@ -77,9 +92,8 @@
 			<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" />
 		</div>
 		
-		<!-- Dynamic Auto-Updating QR Code Section (Replaced barcode.png) -->
-		<div id="qrcode" style="position:absolute; left:244.5pt; top:130pt; width:43.85pt; height:43.85pt; background: #fff; padding: 1pt;">
-		</div>
+		<!-- Dynamic HD QR Code Section -->
+		<div id="qrcode"></div>
 		
 		<!-- Photo Upload Section -->
 		<div style="position:absolute; left:51.25pt; top:76pt">
@@ -138,7 +152,7 @@
 			</div>
 		</div>
 
-		<!-- Dynamic Editable Land Table (Khata, Khasra, Area) -->
+		<!-- Dynamic Editable Land Table -->
 		<div style="position:absolute; left:326.45pt; top:110pt;">
 			<table class="land-table" id="landDetailsTable">
 				<thead>
@@ -158,7 +172,7 @@
 			</table>
 		</div>
 
-		<!-- Bottom Sections (Fixed positions as originally requested) -->
+		<!-- Bottom Sections -->
 		<div style="position:absolute; left:100pt; top:162.95pt;">
 			<span style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold;">Farmer ID : <span class="editable-field" contenteditable="true">4764 1358 808</span></span>
 		</div>
@@ -170,7 +184,6 @@
 		</div>
 	</div>
 
-	<!-- Script to Handle Features: Image Upload, Dynamic Table & Real-Time QR Code -->
 	<script>
 		// --- 1. Image Upload Script ---
 		function previewImage(event) {
@@ -253,7 +266,7 @@
 			}
 		}
 
-		// --- 3. Real-Time QR Code Generation Script ---
+		// --- 3. Real-Time HD QR Code Script ---
 		let qrCodeInstance = null;
 
 		function getCleanText(el) {
@@ -263,36 +276,34 @@
 		function updateQRCode() {
 			const fields = document.querySelectorAll('.editable-field');
 			
-			// Extracting data based on their exact order in the HTML
 			const name = getCleanText(fields[0]);
 			const gender = getCleanText(fields[1]);
 			const dob = getCleanText(fields[2]);
-			// fields[3] is Caste, fields[4] is Area
 			const aadhaar = getCleanText(fields[5]).replace(/\s+/g, '');
 			const address = getCleanText(fields[6]);
 			const farmerIdStr = getCleanText(fields[7]).replace(/\s+/g, ''); 
 
-			// Constructing the exact XML requested format
+			// XML formatting as per exact request
 			const xmlString = `<?xml version="1.0"?>\n<QDB farmerId="${farmerIdStr}" AadhaarNo="${aadhaar}" Name="${name}" Dob="${dob}" Gender="${gender}" Address="${address}"/>`;
 
 			const qrContainer = document.getElementById("qrcode");
-			qrContainer.innerHTML = ""; // Clear existing QR
+			qrContainer.innerHTML = ""; 
 
-			// Generate HD QR code (rendered at 256x256, scaled by CSS)
+			// HD Generation (1024x1024 pixel generation, scaled down securely by CSS)
 			qrCodeInstance = new QRCode(qrContainer, {
 				text: xmlString,
-				width: 256,
-				height: 256,
+				width: 1024,
+				height: 1024,
 				colorDark : "#000000",
 				colorLight : "#ffffff",
 				correctLevel : QRCode.CorrectLevel.M 
 			});
 		}
 
-		// Generate initially when page loads
+		// Initial QR generation
 		window.addEventListener('load', updateQRCode);
 
-		// Listen to all inputs and update QR instantly if any editable field is modified
+		// Instant update on typing
 		document.addEventListener('input', function(e) {
 			if(e.target && e.target.classList.contains('editable-field')) {
 				updateQRCode();

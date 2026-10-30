@@ -3,7 +3,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta name="generator" content="SautinSoft.Document 2026.2.19" />
 	<title>Farmer_ID_PDF</title>
 	<!-- QR Code Library CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -28,17 +27,17 @@
 			gap: 20px;
 		}
 
-		/* The main ID card container - Slightly enlarged */
+		/* The main ID card container */
 		.id-card-container {
 			position: relative; 
 			border: solid 1pt #444; 
 			margin: 0; 
 			overflow: hidden; 
-			width: 615pt; /* Increased from 595.25pt */
-			height: 265pt; /* Increased from 255pt */
+			width: 595.25pt; 
+			height: 255pt;
 			background-color: white; 
 			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-			border-radius: 6px;
+			border-radius: 4px;
 		}
 
 		.editable-field {
@@ -51,23 +50,25 @@
 			background-color: #f9f9f9;
 		}
 		
-		/* Dynamic Land Details Table Styling - Made wider & slightly larger text */
+		/* Dynamic Land Details Table Styling - UPDATED */
 		.land-table {
 			border-collapse: collapse;
-			width: 260pt; /* Increased from 220pt to fit 4 columns */
+			width: 250pt; /* थोड़ा चौड़ा किया गया */
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
-			font-size: 8.5pt;
+			font-size: 8.5pt; /* फॉन्ट साइज बढ़ाया गया */
 			transition: font-size 0.2s;
+			background-color: white;
 		}
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
-			padding: 3px 4px;
+			padding: 3px 4px; /* स्पेसिंग बेहतर की गई */
 			text-align: center;
 			position: relative;
 		}
 		.land-table th {
 			font-weight: bold;
-			background-color: #f2f2f2;
+			background-color: #e3efe3; /* हल्का हरा बैकग्राउंड */
+			color: #006300; /* हेडिंग टेक्स्ट का रंग */
 		}
 		.land-table td {
 			outline: none;
@@ -87,11 +88,11 @@
 			color: white;
 			border: none;
 			border-radius: 50%;
-			width: 14px;
-			height: 14px;
-			font-size: 10px;
+			width: 13px;
+			height: 13px;
+			font-size: 8px;
 			font-weight: bold;
-			line-height: 14px;
+			line-height: 12px;
 			text-align: center;
 			cursor: pointer;
 			z-index: 10;
@@ -103,10 +104,10 @@
 		/* HD QR Code */
 		#qrcode {
 			position: absolute; 
-			left: 250pt; 
-			top: 135pt; 
-			width: 45pt; 
-			height: 45pt; 
+			left: 244.5pt; 
+			top: 130pt; 
+			width: 43.85pt; 
+			height: 43.85pt; 
 			background: #fff; 
 			padding: 1pt;
 			display: flex;
@@ -120,12 +121,13 @@
 			object-fit: contain;
 		}
 
+		/* Drag and Drop */
 		body.dragover .id-card-container {
 			border: 2px dashed #28c940;
 			opacity: 0.8;
 		}
 
-		/* Mac Style Action Buttons */
+		/* Mac Style Action Buttons Container */
 		.action-buttons {
 			display: flex;
 			flex-direction: column;
@@ -165,18 +167,9 @@
 		.btn-reset { background-color: #ff5f56; }
 
 		@media print {
-			body {
-				background: white !important;
-				padding: 0;
-			}
-			.action-buttons {
-				display: none !important;
-			}
-			.id-card-container {
-				border: none;
-				margin: 0;
-				box-shadow: none;
-			}
+			body { background: white !important; padding: 0; }
+			.action-buttons { display: none !important; }
+			.id-card-container { border: none; margin: 0; box-shadow: none; }
 			@page { margin: 0; }
 		}
 	</style>
@@ -188,7 +181,7 @@
 			
 			<!-- Background Image -->
 			<div style="position:absolute; left:34pt; top:34pt">
-				<img style="position:absolute; width:545pt; height:170pt" src="image1.jpeg" alt="Background" />
+				<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" alt="Background" />
 			</div>
 			
 			<!-- Dynamic HD QR Code Section -->
@@ -201,59 +194,59 @@
 			</div>
 			
 			<!-- Small Icon -->
-			<div style="position:absolute; left:461pt; top:192pt">
+			<div style="position:absolute; left:441.5pt; top:185.85pt">
 				<img style="position:absolute; width:9pt; height:9pt" src="image4.png" alt="Icon" />
 			</div>
 
 			<!-- Header -->
 			<div style="position:absolute; left:118.75pt; top:48.7pt;">
 				<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold; left:0pt">Government of India</span>
-				<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold; left:285pt">Government of India</span>
+				<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold; left:274.5pt">Government of India</span>
 			</div>
 
-			<!-- Left Column: Personal Info -->
+			<!-- Left Column: Personal Info (Editable) -->
 			<div style="position:absolute; left:120.25pt; top:75.3pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Name: </span>
-				<span class="editable-field" id="f-name" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">Mohan Lal Yadav</span>
+				<span class="editable-field" id="f-name" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">Mohan Lal Yadav</span>
 			</div>
 
-			<div style="position:absolute; left:120.25pt; top:85pt;">
+			<div style="position:absolute; left:120.25pt; top:84.15pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Gender: </span>
-				<span class="editable-field" id="f-gender" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">Male</span>
+				<span class="editable-field" id="f-gender" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">Male</span>
 			</div>
 
-			<div style="position:absolute; left:120.25pt; top:94.7pt;">
+			<div style="position:absolute; left:120.25pt; top:93.05pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">DOB: </span>
-				<span class="editable-field" id="f-dob" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">11/10/1988</span>
+				<span class="editable-field" id="f-dob" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">11/10/1988</span>
 			</div>
 
-			<div style="position:absolute; left:120.25pt; top:104.4pt;">
+			<div style="position:absolute; left:120.25pt; top:101.9pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Caste: </span>
-				<span class="editable-field" id="f-caste" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">OBC</span>
+				<span class="editable-field" id="f-caste" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">OBC</span>
 			</div>
 
-			<div style="position:absolute; left:120.25pt; top:114.1pt;">
+			<div style="position:absolute; left:120.25pt; top:110.8pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Area: </span>
-				<span class="editable-field" id="f-area" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">Rural</span>
+				<span class="editable-field" id="f-area" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">Rural</span>
 			</div>
 
-			<div style="position:absolute; left:120.25pt; top:123.8pt;">
+			<div style="position:absolute; left:120.25pt; top:119.6pt;">
 				<span style="font-size:9pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Aadhaar: </span>
-				<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000;">[Aadhaar Redacted]</span>
+				<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">[Aadhaar Redacted]</span>
 			</div>
 
-			<!-- Right Column: Address (Slightly shifted to fit wider table) -->
-			<div style="position:absolute; left:315pt; top:69.6pt;">
+			<!-- Right Column: Address (Editable) -->
+			<div style="position:absolute; left:310pt; top:69.6pt;">
 				<span style="font-size:11pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Address</span>
 			</div>
-			<div style="position:absolute; left:315pt; top:83.95pt; width:260pt;">
+			<div style="position:absolute; left:310pt; top:83.95pt; width:250pt;">
 				<div class="editable-field" id="f-address" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000; line-height:1.2;">
 					S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208
 				</div>
 			</div>
 
-			<!-- Dynamic Editable Land Table (With New Column) -->
-			<div style="position:absolute; left:315pt; top:115pt;">
+			<!-- Dynamic Editable Land Table (UPDATED 4 COLUMNS) -->
+			<div style="position:absolute; left:310pt; top:110pt;">
 				<table class="land-table" id="landDetailsTable">
 					<thead>
 						<tr>
@@ -266,7 +259,7 @@
 					<tbody id="table-body">
 						<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1907240033000012</td>
+							<td contenteditable="true">1907240033</td>
 							<td contenteditable="true">33</td>
 							<td contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>
@@ -275,18 +268,18 @@
 			</div>
 
 			<!-- Bottom Sections -->
-			<div style="position:absolute; left:100pt; top:172.95pt;">
+			<div style="position:absolute; left:100pt; top:162.95pt;">
 				<span style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold;">Farmer ID : <span class="editable-field" id="f-id" contenteditable="true">4764 1358 808</span></span>
 			</div>
-			<div style="position:absolute; left:100.6pt; top:194.55pt;">
+			<div style="position:absolute; left:100.6pt; top:184.55pt;">
 				<span style="font-size:12.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Uttar Pradesh Farmer Registry</span>
 			</div>
-			<div style="position:absolute; left:100.6pt; top:195.85pt;">
-				<span style="position:absolute; white-space:pre; font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#333333; font-weight:bold; left:365pt">www.upfr.agristack.gov.in</span>
+			<div style="position:absolute; left:100.6pt; top:185.85pt;">
+				<span style="position:absolute; white-space:pre; font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#333333; font-weight:bold; left:355.9pt">www.upfr.agristack.gov.in</span>
 			</div>
 		</div>
 
-		<!-- Action Buttons -->
+		<!-- Action Buttons Container -->
 		<div class="action-buttons">
 			<button class="mac-btn btn-save" onclick="saveData()" title="Save Data to Local Storage">Save</button>
 			<button class="mac-btn btn-print" onclick="window.print()" title="Print ID Card">Print</button>
@@ -295,6 +288,7 @@
 	</div>
 
 	<script>
+		// --- State Management ---
 		const STORAGE_KEY = 'farmer_id_data';
 
 		const DEFAULT_DATA = {
@@ -303,12 +297,12 @@
 			dob: "11/10/1988",
 			caste: "OBC",
 			area: "Rural",
-			aadhaar: "809055326085",
+			aadhaar: "[Aadhaar Redacted]",
 			address: "S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208",
 			farmerId: "4764 1358 808",
 			tableHTML: `<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1907240033000012</td>
+							<td contenteditable="true">1907240033</td>
 							<td contenteditable="true">33</td>
 							<td contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>`,
@@ -374,6 +368,7 @@
 			}
 		}
 
+		// --- Utilities for Caret positioning ---
 		function placeCaretAtEnd(el) {
 			el.focus();
 			if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
@@ -386,17 +381,19 @@
 			}
 		}
 
+		// --- Farmer ID Auto-Formatting ---
 		document.getElementById('f-id').addEventListener('input', function(e) {
 			let val = this.innerText.replace(/[^0-9]/g, ''); 
 			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim(); 
 			
 			if (this.innerText !== formatted) {
 				this.innerText = formatted;
-				placeCaretAtEnd(this); 
+				placeCaretAtEnd(this);
 			}
-			updateQRCode(); 
+			updateQRCode();
 		});
 
+		// --- Global Paste Handler ---
 		document.addEventListener('paste', function(e) {
 			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
 			
@@ -405,7 +402,7 @@
 					const blob = items[i].getAsFile();
 					updateProfileImage(blob);
 					e.preventDefault();
-					return; 
+					return;
 				}
 			}
 
@@ -416,6 +413,7 @@
 			}
 		});
 
+		// --- Photo Handling ---
 		function updateProfileImage(fileOrBlob) {
 			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
 				const reader = new FileReader();
@@ -443,7 +441,7 @@
 			}
 		});
 
-		// Table Management Updated for 4 Columns
+		// --- Table Management (Updated for 4 columns) ---
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();
@@ -503,17 +501,66 @@
 			const table = document.getElementById('landDetailsTable');
 			const rowCount = table.rows.length;
 			if (rowCount > 4) {
-				table.style.fontSize = '7pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 2px');
-			} else if (rowCount > 2) {
 				table.style.fontSize = '7.5pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 3px');
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 2px');
+			} else if (rowCount > 2) {
+				table.style.fontSize = '8pt';
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 3px');
 			} else {
 				table.style.fontSize = '8.5pt';
 				table.querySelectorAll('th, td').forEach(c => c.style.padding = '3px 4px');
 			}
 		}
 
+		// --- Area Column Validation (Max 4 decimal digits) ---
+		document.getElementById('table-body').addEventListener('input', function(e) {
+			// Area कॉलम का इंडेक्स 3 है (0: Village, 1: Owner, 2: Khasra, 3: Area)
+			if (e.target.tagName === 'TD' && e.target.cellIndex === 3) {
+				let textNode = Array.from(e.target.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
+				let val = textNode ? textNode.nodeValue : '';
+				let orig = val;
+				
+				// सिर्फ संख्या और दशमलव की अनुमति
+				val = val.replace(/[^0-9.]/g, '');
+				
+				let parts = val.split('.');
+				if (parts.length > 2) {
+					parts = [parts[0], parts.slice(1).join('')];
+				}
+				
+				// दशमलव के बाद अधिकतम 4 अंक
+				if (parts.length === 2 && parts[1].length > 4) {
+					parts[1] = parts[1].substring(0, 4);
+				}
+				
+				let newVal = parts.join('.');
+				
+				if (orig !== newVal) {
+					let sel = window.getSelection();
+					let offset = sel.focusOffset;
+					
+					if(textNode) {
+						textNode.nodeValue = newVal;
+					} else {
+						textNode = document.createTextNode(newVal);
+						e.target.insertBefore(textNode, e.target.firstChild);
+					}
+					
+					// कर्सर को सही जगह वापस लाना
+					try {
+						let range = document.createRange();
+						let newOffset = Math.min(offset - (orig.length - newVal.length), newVal.length);
+						newOffset = Math.max(0, newOffset);
+						range.setStart(textNode, newOffset);
+						range.collapse(true);
+						sel.removeAllRanges();
+						sel.addRange(range);
+					} catch(err) {}
+				}
+			}
+		});
+
+		// --- QR Code Management ---
 		let qrCodeInstance = null;
 
 		function getCleanText(id) {
@@ -544,6 +591,7 @@
 			});
 		}
 
+		// --- Initialization ---
 		window.addEventListener('load', () => {
 			loadData(); 
 			updateQRCode();

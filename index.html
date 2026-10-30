@@ -70,7 +70,7 @@
 		}
 		.land-table th {
 			font-weight: bold;
-			background-color: #f2f2f2;
+			background-color: transparent; /* ग्रे बैकग्राउंड हटा दिया गया */
 		}
 		.land-table td {
 			outline: none;
@@ -277,7 +277,7 @@
 					<tbody id="table-body">
 						<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">001</td>
+							<td contenteditable="true">1</td>
 							<td contenteditable="true">33</td>
 							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>
@@ -320,7 +320,7 @@
 			farmerId: "4764 1358 808",
 			tableHTML: `<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">001</td>
+							<td contenteditable="true">1</td>
 							<td contenteditable="true">33</td>
 							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>`,
@@ -489,7 +489,7 @@
 
 		const dropZone = document.body;
 		dropZone.addEventListener('dragover', (e) => { e.preventDefault(); document.body.classList.add('dragover'); });
-		dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); document.body.classList.remove('dragover'); });
+		dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); document.body.classList.remove('dragleave'); });
 		dropZone.addEventListener('drop', (e) => {
 			e.preventDefault();
 			document.body.classList.remove('dragover');

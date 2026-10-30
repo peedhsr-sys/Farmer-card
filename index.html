@@ -54,17 +54,17 @@
 		/* Dynamic Land Details Table Styling */
 		.land-table {
 			border-collapse: collapse;
-			width: 255pt; /* Table width increased for a bigger look */
+			width: 220pt; /* Fixed width to perfectly fit inside the card */
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
-			font-size: 8.5pt; /* Slightly bigger font */
+			font-size: 8pt; 
 			transition: font-size 0.2s;
 			table-layout: fixed;
 		}
-		/* Column width distribution */
-		.land-table th:nth-child(1) { width: 28%; } /* Village */
-		.land-table th:nth-child(2) { width: 28%; } /* Owner Number */
-		.land-table th:nth-child(3) { width: 18%; } /* Khasra */
-		.land-table th:nth-child(4) { width: 26%; } /* Area */
+		/* Adjusted Column width distribution for 4 columns */
+		.land-table th:nth-child(1) { width: 30%; } /* Village */
+		.land-table th:nth-child(2) { width: 25%; } /* Owner Number */
+		.land-table th:nth-child(3) { width: 20%; } /* Khasra */
+		.land-table th:nth-child(4) { width: 25%; } /* Area */
 
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
@@ -276,7 +276,7 @@
 					<tbody id="table-body">
 						<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">12345</td>
+							<td contenteditable="true">1</td>
 							<td contenteditable="true">33</td>
 							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>
@@ -318,8 +318,8 @@
 			address: "S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208",
 			farmerId: "4764 1358 808",
 			tableHTML: `<tr>
-							<td contenteditable="true">1907240033000012</td>
-							<td contenteditable="true">12345</td>
+							<td contenteditable="true">Barhara</td>
+							<td contenteditable="true">1</td>
 							<td contenteditable="true">33</td>
 							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>`,
@@ -566,13 +566,13 @@
 			const table = document.getElementById('landDetailsTable');
 			const rowCount = table.rows.length;
 			if (rowCount > 4) {
-				table.style.fontSize = '7pt';
+				table.style.fontSize = '6.5pt';
 				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 2px');
 			} else if (rowCount > 2) {
-				table.style.fontSize = '7.5pt';
+				table.style.fontSize = '7pt';
 				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 3px');
 			} else {
-				table.style.fontSize = '8.5pt';
+				table.style.fontSize = '8pt';
 				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 4px');
 			}
 		}

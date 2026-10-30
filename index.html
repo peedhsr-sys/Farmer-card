@@ -497,7 +497,7 @@
 			}
 		});
 
-		// --- Table Management ---
+		// --- Table Management (Max 3 data rows + 4th summary row) ---
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();
@@ -513,7 +513,7 @@
 				if (currentRow === tbody.lastElementChild) {
 					const dataRowCount = tbody.querySelectorAll('tr:not(.summary-row)').length;
 
-					if (dataRowCount < 4) {
+					if (dataRowCount < 3) {
 						const newRow = document.createElement('tr');
 						newRow.innerHTML = `
 							<td contenteditable="true"></td>
@@ -532,15 +532,15 @@
 						lastCell.appendChild(delBtn);
 						
 						newRow.firstElementChild.focus();
-					} else if (dataRowCount === 4 && !tbody.querySelector('.summary-row')) {
+					} else if (dataRowCount === 3 && !tbody.querySelector('.summary-row')) {
 						const sumRow = document.createElement('tr');
 						sumRow.className = 'summary-row';
 						sumRow.innerHTML = `
 							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px;">
-								Number of Lands Owned : <span class="editable-field" contenteditable="true">4</span>
+								Number of Lands : <span class="editable-field" contenteditable="true">4</span>
 							</td>
 							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px; position:relative;">
-								Total Land Area Owned : <span class="editable-field" contenteditable="true">0.0826</span>
+								Total Land Area : <span class="editable-field" contenteditable="true">0.0826</span>
 								<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button>
 							</td>
 						`;
@@ -580,7 +580,6 @@
 		}
 
 		function autoFitTable() {
-			// टेबल की साइज़ फिक्स रखने के लिए कोई बदलाव नहीं किया जाएगा
 			const table = document.getElementById('landDetailsTable');
 			table.style.fontSize = '8pt';
 		}

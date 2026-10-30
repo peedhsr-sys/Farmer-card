@@ -61,7 +61,7 @@
 		}
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
-			padding: 3px 2px;
+			padding: 2.5px 2px;
 			text-align: center;
 			position: relative;
 			word-wrap: break-word;
@@ -83,6 +83,13 @@
 		.land-table th:nth-child(2), .land-table td:nth-child(2) { width: 24%; }
 		.land-table th:nth-child(3), .land-table td:nth-child(3) { width: 20%; }
 		.land-table th:nth-child(4), .land-table td:nth-child(4) { width: 22%; }
+
+		/* Summary row compact styling */
+		.summary-row td {
+			padding: 1.5px 3px !important;
+			font-size: 7.2pt !important;
+			line-height: 1.1 !important;
+		}
 		
 		/* Delete button strictly inside table cell */
 		.delete-row-btn {
@@ -253,17 +260,17 @@
 			</div>
 
 			<!-- Right Column: Address (Editable) -->
-			<div style="position:absolute; left:326.45pt; top:69.6pt;">
+			<div style="position:absolute; left:326.45pt; top:68pt;">
 				<span style="font-size:11pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Address</span>
 			</div>
-			<div style="position:absolute; left:326.45pt; top:83.95pt; width:230pt;">
+			<div style="position:absolute; left:326.45pt; top:82pt; width:230pt;">
 				<div class="editable-field" id="f-address" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000; line-height:1.2;">
 					S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208
 				</div>
 			</div>
 
-			<!-- Dynamic Editable Land Table -->
-			<div style="position:absolute; left:326.45pt; top:108pt;">
+			<!-- Dynamic Editable Land Table (top 103pt set kar diya hai) -->
+			<div style="position:absolute; left:326.45pt; top:103pt;">
 				<table class="land-table" id="landDetailsTable">
 					<thead>
 						<tr>

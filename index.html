@@ -8,34 +8,37 @@
 	<!-- QR Code Library CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 	<style>
-		/* General Styling */
+		/* Premium Mac-Style Dark Theme */
 		body {
 			margin: 0;
 			padding: 0;
-			background-color: #f4f4f4; /* Light background for the page outside the card */
+			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%); /* Sleek Dark Gradient */
+			min-height: 100vh;
 			font-family: Arial, sans-serif;
 			display: flex;
 			justify-content: center;
 			align-items: flex-start;
-			padding-top: 20px;
+			padding-top: 30px;
 		}
 		
 		/* Main wrapper to hold card and action buttons side-by-side */
 		.main-wrapper {
 			display: flex;
 			align-items: center;
-			gap: 15px;
+			gap: 20px;
 		}
 
-		/* The main ID card container */
+		/* The main ID card container - Keeps its white background for realism */
 		.id-card-container {
 			position: relative; 
-			border: solid 1pt black; 
+			border: solid 1pt #444; 
 			margin: 0; 
 			overflow: hidden; 
 			width: 595.25pt; 
 			height: 255pt;
-			background-color: white; /* Ensure card background is white */
+			background-color: white; 
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Deep shadow for dark theme */
+			border-radius: 4px;
 		}
 
 		.editable-field {
@@ -119,19 +122,21 @@
 
 		/* Drag and Drop visual cue */
 		body.dragover .id-card-container {
-			border: 2px dashed #006300;
+			border: 2px dashed #28c940;
 			opacity: 0.8;
 		}
 
-		/* --- Mac Style Action Buttons Container --- */
+		/* --- Mac Style Action Buttons Container (Dark Glassmorphism) --- */
 		.action-buttons {
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
-			background: #e0e0e0;
+			background: rgba(44, 44, 46, 0.7); /* Mac Dark Glass */
+			backdrop-filter: blur(12px);
 			padding: 15px 10px;
 			border-radius: 25px;
-			box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+			box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+			border: 1px solid rgba(255,255,255,0.1);
 		}
 
 		.mac-btn {
@@ -146,24 +151,24 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			box-shadow: inset -2px -2px 5px rgba(0,0,0,0.2), inset 2px 2px 5px rgba(255,255,255,0.5), 2px 2px 5px rgba(0,0,0,0.3);
+			box-shadow: inset -2px -2px 5px rgba(0,0,0,0.3), inset 2px 2px 5px rgba(255,255,255,0.2), 2px 2px 5px rgba(0,0,0,0.4);
 			transition: transform 0.1s, box-shadow 0.1s;
 			text-transform: uppercase;
 		}
 
 		.mac-btn:active {
 			transform: scale(0.92);
-			box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3), inset -2px -2px 5px rgba(255,255,255,0.2);
+			box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -2px -2px 5px rgba(255,255,255,0.1);
 		}
 
 		.btn-save { background-color: #28c940; } /* Mac Green */
 		.btn-print { background-color: #ffbd2e; color: #333; } /* Mac Yellow */
 		.btn-reset { background-color: #ff5f56; } /* Mac Red */
 
-		/* Hide buttons during print */
+		/* Hide buttons and restore pure white background during print */
 		@media print {
 			body {
-				background-color: white;
+				background: white !important;
 				padding: 0;
 			}
 			.action-buttons {
@@ -174,7 +179,6 @@
 				margin: 0;
 				box-shadow: none;
 			}
-			/* Hide background image wrapper lines if any, but ensure card prints well */
 			@page { margin: 0; }
 		}
 	</style>
@@ -326,7 +330,6 @@
 			};
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 			
-			// Visual feedback for save
 			const saveBtn = document.querySelector('.btn-save');
 			saveBtn.innerText = "Saved";
 			setTimeout(() => { saveBtn.innerText = "Save"; }, 1500);
@@ -371,7 +374,54 @@
 			}
 		}
 
-		// --- Photo Handling (Click, Paste, Drag & Drop) ---
+		// --- Utilities for Caret positioning in contenteditable ---
+		function placeCaretAtEnd(el) {
+			el.focus();
+			if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+				let range = document.createRange();
+				range.selectNodeContents(el);
+				range.collapse(false);
+				let sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
+		}
+
+		// --- Farmer ID Auto-Formatting (Space after every 4 digits) ---
+		document.getElementById('f-id').addEventListener('input', function(e) {
+			let val = this.innerText.replace(/[^0-9]/g, ''); // Extract only numbers
+			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim(); // Add space after every 4 digits
+			
+			if (this.innerText !== formatted) {
+				this.innerText = formatted;
+				placeCaretAtEnd(this); // Reset cursor to end to prevent jumping bugs
+			}
+			updateQRCode(); // Keep QR updated real-time
+		});
+
+		// --- Global Paste Handler (Images & Plain Text) ---
+		document.addEventListener('paste', function(e) {
+			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+			
+			// 1. Check for Image Paste
+			for (let i = 0; i < items.length; i++) {
+				if (items[i].type.indexOf('image') !== -1) {
+					const blob = items[i].getAsFile();
+					updateProfileImage(blob);
+					e.preventDefault();
+					return; // Stop here if image is pasted
+				}
+			}
+
+			// 2. Force Plain Text Paste in all editable fields (Preserves formatting/colors)
+			if (e.target && (e.target.classList.contains('editable-field') || e.target.tagName === 'TD')) {
+				e.preventDefault();
+				let text = (e.clipboardData || window.clipboardData).getData('text/plain');
+				document.execCommand('insertText', false, text);
+			}
+		});
+
+		// --- Photo Handling (Click, Drag & Drop) ---
 		function updateProfileImage(fileOrBlob) {
 			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
 				const reader = new FileReader();
@@ -387,18 +437,6 @@
 				updateProfileImage(event.target.files[0]);
 			}
 		}
-
-		document.addEventListener('paste', function(e) {
-			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-			for (let i = 0; i < items.length; i++) {
-				if (items[i].type.indexOf('image') !== -1) {
-					const blob = items[i].getAsFile();
-					updateProfileImage(blob);
-					e.preventDefault();
-					return;
-				}
-			}
-		});
 
 		const dropZone = document.body;
 		dropZone.addEventListener('dragover', (e) => { e.preventDefault(); document.body.classList.add('dragover'); });
@@ -518,7 +556,8 @@
 		});
 
 		document.addEventListener('input', function(e) {
-			if(e.target && e.target.classList.contains('editable-field')) {
+			// Update QR code for any input except Farmer ID (which is handled separately to avoid double firing)
+			if(e.target && e.target.classList.contains('editable-field') && e.target.id !== 'f-id') {
 				updateQRCode();
 			}
 		});

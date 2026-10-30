@@ -197,6 +197,23 @@
 			}
 		}
 
+		// --- NEW: Copy-Paste Image Script ---
+		document.addEventListener('paste', function(e) {
+			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+			for (let i = 0; i < items.length; i++) {
+				if (items[i].type.indexOf('image') !== -1) {
+					const blob = items[i].getAsFile();
+					const reader = new FileReader();
+					reader.onload = function(event) {
+						// Set the pasted image to the profile photo element
+						document.getElementById('profilePhoto').src = event.target.result;
+					};
+					reader.readAsDataURL(blob);
+					e.preventDefault(); // Prevent default paste behavior
+				}
+			}
+		});
+
 		// --- 2. Dynamic Table Script ---
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {

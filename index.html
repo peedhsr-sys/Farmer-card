@@ -12,7 +12,7 @@
 		body {
 			margin: 0;
 			padding: 0;
-			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%); /* Sleek Dark Gradient */
+			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);
 			min-height: 100vh;
 			font-family: Arial, sans-serif;
 			display: flex;
@@ -28,7 +28,7 @@
 			gap: 20px;
 		}
 
-		/* The main ID card container - Keeps its white background for realism */
+		/* The main ID card container */
 		.id-card-container {
 			position: relative; 
 			border: solid 1pt #444; 
@@ -37,7 +37,7 @@
 			width: 595.25pt; 
 			height: 255pt;
 			background-color: white; 
-			box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Deep shadow for dark theme */
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 			border-radius: 4px;
 		}
 
@@ -54,24 +54,19 @@
 		/* Dynamic Land Details Table Styling */
 		.land-table {
 			border-collapse: collapse;
-			width: 220pt; /* Fixed width to perfectly fit inside the card */
+			width: 232pt;
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
-			font-size: 8pt; 
+			font-size: 8pt;
 			transition: font-size 0.2s;
 			table-layout: fixed;
 		}
-		/* Adjusted Column width distribution for 4 columns */
-		.land-table th:nth-child(1) { width: 30%; } /* Village */
-		.land-table th:nth-child(2) { width: 25%; } /* Owner Number */
-		.land-table th:nth-child(3) { width: 20%; } /* Khasra */
-		.land-table th:nth-child(4) { width: 25%; } /* Area */
-
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
-			padding: 2px 4px;
+			padding: 3px 2px;
 			text-align: center;
 			position: relative;
 			word-wrap: break-word;
+			overflow-wrap: break-word;
 		}
 		.land-table th {
 			font-weight: bold;
@@ -83,26 +78,33 @@
 		.land-table td:focus {
 			background-color: #e8f4e8;
 		}
+
+		/* Column widths distribution */
+		.land-table th:nth-child(1), .land-table td:nth-child(1) { width: 34%; }
+		.land-table th:nth-child(2), .land-table td:nth-child(2) { width: 24%; }
+		.land-table th:nth-child(3), .land-table td:nth-child(3) { width: 20%; }
+		.land-table th:nth-child(4), .land-table td:nth-child(4) { width: 22%; }
 		
 		/* Delete button strictly inside table cell */
 		.delete-row-btn {
 			display: none;
 			position: absolute;
-			right: 3px;
+			right: 2px;
 			top: 50%;
 			transform: translateY(-50%);
 			background: #d9534f;
 			color: white;
 			border: none;
 			border-radius: 50%;
-			width: 13px;
-			height: 13px;
+			width: 12px;
+			height: 12px;
 			font-size: 8px;
 			font-weight: bold;
-			line-height: 12px;
+			line-height: 11px;
 			text-align: center;
 			cursor: pointer;
 			z-index: 10;
+			padding: 0;
 		}
 		.land-table tr:hover .delete-row-btn {
 			display: block;
@@ -134,12 +136,12 @@
 			opacity: 0.8;
 		}
 
-		/* --- Mac Style Action Buttons Container (Dark Glassmorphism) --- */
+		/* Mac Style Action Buttons */
 		.action-buttons {
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
-			background: rgba(44, 44, 46, 0.7); /* Mac Dark Glass */
+			background: rgba(44, 44, 46, 0.7);
 			backdrop-filter: blur(12px);
 			padding: 15px 10px;
 			border-radius: 25px;
@@ -169,11 +171,10 @@
 			box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -2px -2px 5px rgba(255,255,255,0.1);
 		}
 
-		.btn-save { background-color: #28c940; } /* Mac Green */
-		.btn-print { background-color: #ffbd2e; color: #333; } /* Mac Yellow */
-		.btn-reset { background-color: #ff5f56; } /* Mac Red */
+		.btn-save { background-color: #28c940; }
+		.btn-print { background-color: #ffbd2e; color: #333; }
+		.btn-reset { background-color: #ff5f56; }
 
-		/* Hide buttons and restore pure white background during print */
 		@media print {
 			body {
 				background: white !important;
@@ -263,7 +264,7 @@
 			</div>
 
 			<!-- Dynamic Editable Land Table -->
-			<div style="position:absolute; left:326.45pt; top:110pt;">
+			<div style="position:absolute; left:326.45pt; top:108pt;">
 				<table class="land-table" id="landDetailsTable">
 					<thead>
 						<tr>
@@ -276,9 +277,9 @@
 					<tbody id="table-body">
 						<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1</td>
+							<td contenteditable="true">001</td>
 							<td contenteditable="true">33</td>
-							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
+							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>
 					</tbody>
 				</table>
@@ -319,9 +320,9 @@
 			farmerId: "4764 1358 808",
 			tableHTML: `<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1</td>
+							<td contenteditable="true">001</td>
 							<td contenteditable="true">33</td>
-							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
+							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>`,
 			photoSrc: "photo.jpeg"
 		};
@@ -400,85 +401,76 @@
 
 		// --- Farmer ID Auto-Formatting (Space after every 4 digits) ---
 		document.getElementById('f-id').addEventListener('input', function(e) {
-			let val = this.innerText.replace(/[^0-9]/g, ''); // Extract only numbers
-			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim(); // Add space after every 4 digits
+			let val = this.innerText.replace(/[^0-9]/g, '');
+			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
 			
 			if (this.innerText !== formatted) {
 				this.innerText = formatted;
-				placeCaretAtEnd(this); // Reset cursor to end to prevent jumping bugs
+				placeCaretAtEnd(this);
 			}
-			updateQRCode(); // Keep QR updated real-time
-		});
-
-		// --- Real-time Validation for Area Column (Max 4 Decimal Places) ---
-		document.getElementById('landDetailsTable').addEventListener('input', function(e) {
-			if (e.target.classList.contains('area-cell')) {
-				let textNode = null;
-				// Find text node avoiding the delete button
-				for (let node of e.target.childNodes) {
-					if (node.nodeType === Node.TEXT_NODE) {
-						textNode = node;
-						break;
-					}
-				}
-				
-				if (textNode) {
-					let val = textNode.nodeValue;
-					let cleanVal = val.replace(/[^0-9.]/g, ''); // Only numbers and dot
-					
-					let parts = cleanVal.split('.');
-					if (parts.length > 2) {
-						cleanVal = parts[0] + '.' + parts.slice(1).join('');
-					}
-					
-					if (parts.length === 2 && parts[1].length > 4) {
-						cleanVal = parts[0] + '.' + parts[1].substring(0, 4);
-					}
-
-					if (val !== cleanVal) {
-						textNode.nodeValue = cleanVal;
-						placeCaretAtEnd(e.target);
-					}
-				}
-			}
+			updateQRCode();
 		});
 
 		// --- Global Paste Handler (Images & Plain Text) ---
 		document.addEventListener('paste', function(e) {
 			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
 			
-			// 1. Check for Image Paste
 			for (let i = 0; i < items.length; i++) {
 				if (items[i].type.indexOf('image') !== -1) {
 					const blob = items[i].getAsFile();
 					updateProfileImage(blob);
 					e.preventDefault();
-					return; // Stop here if image is pasted
+					return;
 				}
 			}
 
-			// 2. Force Plain Text Paste in all editable fields
 			if (e.target && (e.target.classList.contains('editable-field') || e.target.tagName === 'TD')) {
 				e.preventDefault();
 				let text = (e.clipboardData || window.clipboardData).getData('text/plain');
 				
-				// Apply 4 decimal logic if pasting into Area Cell
-				if (e.target.classList.contains('area-cell')) {
-					let cleanText = text.replace(/[^0-9.]/g, '');
-					let parts = cleanText.split('.');
-					if (parts.length > 2) cleanText = parts[0] + '.' + parts.slice(1).join('');
-					if (parts.length === 2 && parts[1].length > 4) {
-						text = parts[0] + '.' + parts[1].substring(0, 4);
-					} else {
-						text = cleanText;
-					}
+				// Area cell restriction: Max 4 decimal digits
+				if (e.target.classList.contains('area-cell') || e.target.cellIndex === 3) {
+					text = sanitizeAreaValue(text);
 				}
 				
 				document.execCommand('insertText', false, text);
 			}
 		});
 
-		// --- Photo Handling (Click, Drag & Drop) ---
+		// --- Area Decimal Limiter (Max 4 decimal places) ---
+		function sanitizeAreaValue(val) {
+			val = val.replace(/[^0-9.]/g, '');
+			const parts = val.split('.');
+			if (parts.length > 2) {
+				val = parts[0] + '.' + parts.slice(1).join('');
+			}
+			const finalParts = val.split('.');
+			if (finalParts.length === 2 && finalParts[1].length > 4) {
+				val = finalParts[0] + '.' + finalParts[1].substring(0, 4);
+			}
+			return val;
+		}
+
+		// Monitor Area inputs strictly
+		document.getElementById('landDetailsTable').addEventListener('input', function(e) {
+			if (e.target && e.target.tagName === 'TD' && (e.target.classList.contains('area-cell') || e.target.cellIndex === 3)) {
+				let btn = e.target.querySelector('.delete-row-btn');
+				let rawText = e.target.innerText.replace('×', '').trim();
+				let sanitized = sanitizeAreaValue(rawText);
+				
+				if (rawText !== sanitized) {
+					if (btn) {
+						e.target.innerHTML = sanitized;
+						e.target.appendChild(btn);
+					} else {
+						e.target.innerText = sanitized;
+					}
+					placeCaretAtEnd(e.target);
+				}
+			}
+		});
+
+		// --- Photo Handling ---
 		function updateProfileImage(fileOrBlob) {
 			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
 				const reader = new FileReader();
@@ -521,7 +513,7 @@
 							<td contenteditable="true"></td>
 							<td contenteditable="true"></td>
 							<td contenteditable="true"></td>
-							<td class="area-cell" contenteditable="true" style="position:relative;"></td>
+							<td contenteditable="true" class="area-cell" style="position:relative;"></td>
 						`;
 						tbody.appendChild(newRow);
 						const lastCell = newRow.lastElementChild;
@@ -567,13 +559,13 @@
 			const rowCount = table.rows.length;
 			if (rowCount > 4) {
 				table.style.fontSize = '6.5pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 2px');
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 1px');
 			} else if (rowCount > 2) {
-				table.style.fontSize = '7pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 3px');
+				table.style.fontSize = '7.2pt';
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 2px');
 			} else {
 				table.style.fontSize = '8pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 4px');
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '3px 2px');
 			}
 		}
 
@@ -615,7 +607,6 @@
 		});
 
 		document.addEventListener('input', function(e) {
-			// Update QR code for any input except Farmer ID (which is handled separately to avoid double firing)
 			if(e.target && e.target.classList.contains('editable-field') && e.target.id !== 'f-id') {
 				updateQRCode();
 			}

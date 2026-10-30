@@ -3,6 +3,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<meta name="generator" content="SautinSoft.Document 2026.2.19" />
 	<title>Farmer_ID_PDF</title>
 	<!-- QR Code Library CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,7 +12,7 @@
 		body {
 			margin: 0;
 			padding: 0;
-			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);
+			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%); /* Sleek Dark Gradient */
 			min-height: 100vh;
 			font-family: Arial, sans-serif;
 			display: flex;
@@ -20,14 +21,14 @@
 			padding-top: 30px;
 		}
 		
-		/* Main wrapper */
+		/* Main wrapper to hold card and action buttons side-by-side */
 		.main-wrapper {
 			display: flex;
 			align-items: center;
 			gap: 20px;
 		}
 
-		/* The main ID card container */
+		/* The main ID card container - Keeps its white background for realism */
 		.id-card-container {
 			position: relative; 
 			border: solid 1pt #444; 
@@ -36,7 +37,7 @@
 			width: 595.25pt; 
 			height: 255pt;
 			background-color: white; 
-			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+			box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Deep shadow for dark theme */
 			border-radius: 4px;
 		}
 
@@ -50,25 +51,31 @@
 			background-color: #f9f9f9;
 		}
 		
-		/* Dynamic Land Details Table Styling - UPDATED */
+		/* Dynamic Land Details Table Styling */
 		.land-table {
 			border-collapse: collapse;
-			width: 250pt; /* थोड़ा चौड़ा किया गया */
+			width: 255pt; /* Table width increased for a bigger look */
 			font-family: 'Calibri', 'Times New Roman', sans-serif;
-			font-size: 8.5pt; /* फॉन्ट साइज बढ़ाया गया */
+			font-size: 8.5pt; /* Slightly bigger font */
 			transition: font-size 0.2s;
-			background-color: white;
+			table-layout: fixed;
 		}
+		/* Column width distribution */
+		.land-table th:nth-child(1) { width: 28%; } /* Village */
+		.land-table th:nth-child(2) { width: 28%; } /* Owner Number */
+		.land-table th:nth-child(3) { width: 18%; } /* Khasra */
+		.land-table th:nth-child(4) { width: 26%; } /* Area */
+
 		.land-table th, .land-table td {
 			border: 0.75pt solid #b0aeae;
-			padding: 3px 4px; /* स्पेसिंग बेहतर की गई */
+			padding: 2px 4px;
 			text-align: center;
 			position: relative;
+			word-wrap: break-word;
 		}
 		.land-table th {
 			font-weight: bold;
-			background-color: #e3efe3; /* हल्का हरा बैकग्राउंड */
-			color: #006300; /* हेडिंग टेक्स्ट का रंग */
+			background-color: #f2f2f2;
 		}
 		.land-table td {
 			outline: none;
@@ -77,7 +84,7 @@
 			background-color: #e8f4e8;
 		}
 		
-		/* Delete button */
+		/* Delete button strictly inside table cell */
 		.delete-row-btn {
 			display: none;
 			position: absolute;
@@ -101,7 +108,7 @@
 			display: block;
 		}
 		
-		/* HD QR Code */
+		/* HD QR Code strictly fixed to original size */
 		#qrcode {
 			position: absolute; 
 			left: 244.5pt; 
@@ -121,18 +128,18 @@
 			object-fit: contain;
 		}
 
-		/* Drag and Drop */
+		/* Drag and Drop visual cue */
 		body.dragover .id-card-container {
 			border: 2px dashed #28c940;
 			opacity: 0.8;
 		}
 
-		/* Mac Style Action Buttons Container */
+		/* --- Mac Style Action Buttons Container (Dark Glassmorphism) --- */
 		.action-buttons {
 			display: flex;
 			flex-direction: column;
 			gap: 15px;
-			background: rgba(44, 44, 46, 0.7);
+			background: rgba(44, 44, 46, 0.7); /* Mac Dark Glass */
 			backdrop-filter: blur(12px);
 			padding: 15px 10px;
 			border-radius: 25px;
@@ -162,14 +169,24 @@
 			box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4), inset -2px -2px 5px rgba(255,255,255,0.1);
 		}
 
-		.btn-save { background-color: #28c940; }
-		.btn-print { background-color: #ffbd2e; color: #333; }
-		.btn-reset { background-color: #ff5f56; }
+		.btn-save { background-color: #28c940; } /* Mac Green */
+		.btn-print { background-color: #ffbd2e; color: #333; } /* Mac Yellow */
+		.btn-reset { background-color: #ff5f56; } /* Mac Red */
 
+		/* Hide buttons and restore pure white background during print */
 		@media print {
-			body { background: white !important; padding: 0; }
-			.action-buttons { display: none !important; }
-			.id-card-container { border: none; margin: 0; box-shadow: none; }
+			body {
+				background: white !important;
+				padding: 0;
+			}
+			.action-buttons {
+				display: none !important;
+			}
+			.id-card-container {
+				border: none;
+				margin: 0;
+				box-shadow: none;
+			}
 			@page { margin: 0; }
 		}
 	</style>
@@ -236,17 +253,17 @@
 			</div>
 
 			<!-- Right Column: Address (Editable) -->
-			<div style="position:absolute; left:310pt; top:69.6pt;">
+			<div style="position:absolute; left:326.45pt; top:69.6pt;">
 				<span style="font-size:11pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Address</span>
 			</div>
-			<div style="position:absolute; left:310pt; top:83.95pt; width:250pt;">
+			<div style="position:absolute; left:326.45pt; top:83.95pt; width:230pt;">
 				<div class="editable-field" id="f-address" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000; line-height:1.2;">
 					S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208
 				</div>
 			</div>
 
-			<!-- Dynamic Editable Land Table (UPDATED 4 COLUMNS) -->
-			<div style="position:absolute; left:310pt; top:110pt;">
+			<!-- Dynamic Editable Land Table -->
+			<div style="position:absolute; left:326.45pt; top:110pt;">
 				<table class="land-table" id="landDetailsTable">
 					<thead>
 						<tr>
@@ -259,9 +276,9 @@
 					<tbody id="table-body">
 						<tr>
 							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1907240033</td>
+							<td contenteditable="true">12345</td>
 							<td contenteditable="true">33</td>
-							<td contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
+							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>
 					</tbody>
 				</table>
@@ -279,7 +296,7 @@
 			</div>
 		</div>
 
-		<!-- Action Buttons Container -->
+		<!-- Action Buttons Container (Right Side) -->
 		<div class="action-buttons">
 			<button class="mac-btn btn-save" onclick="saveData()" title="Save Data to Local Storage">Save</button>
 			<button class="mac-btn btn-print" onclick="window.print()" title="Print ID Card">Print</button>
@@ -288,7 +305,7 @@
 	</div>
 
 	<script>
-		// --- State Management ---
+		// --- State Management (Local Storage) ---
 		const STORAGE_KEY = 'farmer_id_data';
 
 		const DEFAULT_DATA = {
@@ -301,10 +318,10 @@
 			address: "S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208",
 			farmerId: "4764 1358 808",
 			tableHTML: `<tr>
-							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1907240033</td>
+							<td contenteditable="true">1907240033000012</td>
+							<td contenteditable="true">12345</td>
 							<td contenteditable="true">33</td>
-							<td contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
+							<td class="area-cell" contenteditable="true" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
 						</tr>`,
 			photoSrc: "photo.jpeg"
 		};
@@ -368,7 +385,7 @@
 			}
 		}
 
-		// --- Utilities for Caret positioning ---
+		// --- Utilities for Caret positioning in contenteditable ---
 		function placeCaretAtEnd(el) {
 			el.focus();
 			if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
@@ -381,39 +398,87 @@
 			}
 		}
 
-		// --- Farmer ID Auto-Formatting ---
+		// --- Farmer ID Auto-Formatting (Space after every 4 digits) ---
 		document.getElementById('f-id').addEventListener('input', function(e) {
-			let val = this.innerText.replace(/[^0-9]/g, ''); 
-			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim(); 
+			let val = this.innerText.replace(/[^0-9]/g, ''); // Extract only numbers
+			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim(); // Add space after every 4 digits
 			
 			if (this.innerText !== formatted) {
 				this.innerText = formatted;
-				placeCaretAtEnd(this);
+				placeCaretAtEnd(this); // Reset cursor to end to prevent jumping bugs
 			}
-			updateQRCode();
+			updateQRCode(); // Keep QR updated real-time
 		});
 
-		// --- Global Paste Handler ---
+		// --- Real-time Validation for Area Column (Max 4 Decimal Places) ---
+		document.getElementById('landDetailsTable').addEventListener('input', function(e) {
+			if (e.target.classList.contains('area-cell')) {
+				let textNode = null;
+				// Find text node avoiding the delete button
+				for (let node of e.target.childNodes) {
+					if (node.nodeType === Node.TEXT_NODE) {
+						textNode = node;
+						break;
+					}
+				}
+				
+				if (textNode) {
+					let val = textNode.nodeValue;
+					let cleanVal = val.replace(/[^0-9.]/g, ''); // Only numbers and dot
+					
+					let parts = cleanVal.split('.');
+					if (parts.length > 2) {
+						cleanVal = parts[0] + '.' + parts.slice(1).join('');
+					}
+					
+					if (parts.length === 2 && parts[1].length > 4) {
+						cleanVal = parts[0] + '.' + parts[1].substring(0, 4);
+					}
+
+					if (val !== cleanVal) {
+						textNode.nodeValue = cleanVal;
+						placeCaretAtEnd(e.target);
+					}
+				}
+			}
+		});
+
+		// --- Global Paste Handler (Images & Plain Text) ---
 		document.addEventListener('paste', function(e) {
 			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
 			
+			// 1. Check for Image Paste
 			for (let i = 0; i < items.length; i++) {
 				if (items[i].type.indexOf('image') !== -1) {
 					const blob = items[i].getAsFile();
 					updateProfileImage(blob);
 					e.preventDefault();
-					return;
+					return; // Stop here if image is pasted
 				}
 			}
 
+			// 2. Force Plain Text Paste in all editable fields
 			if (e.target && (e.target.classList.contains('editable-field') || e.target.tagName === 'TD')) {
 				e.preventDefault();
 				let text = (e.clipboardData || window.clipboardData).getData('text/plain');
+				
+				// Apply 4 decimal logic if pasting into Area Cell
+				if (e.target.classList.contains('area-cell')) {
+					let cleanText = text.replace(/[^0-9.]/g, '');
+					let parts = cleanText.split('.');
+					if (parts.length > 2) cleanText = parts[0] + '.' + parts.slice(1).join('');
+					if (parts.length === 2 && parts[1].length > 4) {
+						text = parts[0] + '.' + parts[1].substring(0, 4);
+					} else {
+						text = cleanText;
+					}
+				}
+				
 				document.execCommand('insertText', false, text);
 			}
 		});
 
-		// --- Photo Handling ---
+		// --- Photo Handling (Click, Drag & Drop) ---
 		function updateProfileImage(fileOrBlob) {
 			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
 				const reader = new FileReader();
@@ -441,7 +506,7 @@
 			}
 		});
 
-		// --- Table Management (Updated for 4 columns) ---
+		// --- Table Management ---
 		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
 			if (e.key === 'Enter') {
 				e.preventDefault();
@@ -456,7 +521,7 @@
 							<td contenteditable="true"></td>
 							<td contenteditable="true"></td>
 							<td contenteditable="true"></td>
-							<td contenteditable="true" style="position:relative;"></td>
+							<td class="area-cell" contenteditable="true" style="position:relative;"></td>
 						`;
 						tbody.appendChild(newRow);
 						const lastCell = newRow.lastElementChild;
@@ -501,64 +566,16 @@
 			const table = document.getElementById('landDetailsTable');
 			const rowCount = table.rows.length;
 			if (rowCount > 4) {
-				table.style.fontSize = '7.5pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 2px');
+				table.style.fontSize = '7pt';
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 2px');
 			} else if (rowCount > 2) {
-				table.style.fontSize = '8pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 3px');
+				table.style.fontSize = '7.5pt';
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '1px 3px');
 			} else {
 				table.style.fontSize = '8.5pt';
-				table.querySelectorAll('th, td').forEach(c => c.style.padding = '3px 4px');
+				table.querySelectorAll('th, td').forEach(c => c.style.padding = '2px 4px');
 			}
 		}
-
-		// --- Area Column Validation (Max 4 decimal digits) ---
-		document.getElementById('table-body').addEventListener('input', function(e) {
-			// Area कॉलम का इंडेक्स 3 है (0: Village, 1: Owner, 2: Khasra, 3: Area)
-			if (e.target.tagName === 'TD' && e.target.cellIndex === 3) {
-				let textNode = Array.from(e.target.childNodes).find(n => n.nodeType === Node.TEXT_NODE);
-				let val = textNode ? textNode.nodeValue : '';
-				let orig = val;
-				
-				// सिर्फ संख्या और दशमलव की अनुमति
-				val = val.replace(/[^0-9.]/g, '');
-				
-				let parts = val.split('.');
-				if (parts.length > 2) {
-					parts = [parts[0], parts.slice(1).join('')];
-				}
-				
-				// दशमलव के बाद अधिकतम 4 अंक
-				if (parts.length === 2 && parts[1].length > 4) {
-					parts[1] = parts[1].substring(0, 4);
-				}
-				
-				let newVal = parts.join('.');
-				
-				if (orig !== newVal) {
-					let sel = window.getSelection();
-					let offset = sel.focusOffset;
-					
-					if(textNode) {
-						textNode.nodeValue = newVal;
-					} else {
-						textNode = document.createTextNode(newVal);
-						e.target.insertBefore(textNode, e.target.firstChild);
-					}
-					
-					// कर्सर को सही जगह वापस लाना
-					try {
-						let range = document.createRange();
-						let newOffset = Math.min(offset - (orig.length - newVal.length), newVal.length);
-						newOffset = Math.max(0, newOffset);
-						range.setStart(textNode, newOffset);
-						range.collapse(true);
-						sel.removeAllRanges();
-						sel.addRange(range);
-					} catch(err) {}
-				}
-			}
-		});
 
 		// --- QR Code Management ---
 		let qrCodeInstance = null;
@@ -598,6 +615,7 @@
 		});
 
 		document.addEventListener('input', function(e) {
+			// Update QR code for any input except Farmer ID (which is handled separately to avoid double firing)
 			if(e.target && e.target.classList.contains('editable-field') && e.target.id !== 'f-id') {
 				updateQRCode();
 			}

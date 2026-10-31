@@ -1,34 +1,630 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta name="generator" content="SautinSoft.Document 2026.2.19" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Farmer_ID_PDF</title>
 	<!-- QR Code Library CDN -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+	<!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	
 	<style>
-		/* Premium Mac-Style Dark Theme */
+		/* Base Reset (Scoped so Card styling remains 100% untouched) */
 		body {
 			margin: 0;
 			padding: 0;
 			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);
 			min-height: 100vh;
 			font-family: Arial, sans-serif;
-			display: flex;
-			justify-content: center;
-			align-items: flex-start;
-			padding-top: 30px;
+			color: #e5e7eb;
+			overflow-x: hidden;
 		}
-		
-		/* Main wrapper to hold card and action buttons side-by-side */
+
+		/* Screen Views */
+		.view-screen {
+			display: none;
+			min-height: 100vh;
+			width: 100%;
+			position: relative;
+			box-sizing: border-box;
+		}
+		.view-screen.active {
+			display: flex;
+		}
+
+		/* =========================================================
+		   1. NEXT-GEN AI LOCK SCREEN (Entry Guard)
+		   ========================================================= */
+		#screen-lock {
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+			background: radial-gradient(circle at 50% 20%, #151930 0%, #08090d 65%, #030406 100%);
+			font-family: 'Outfit', -apple-system, sans-serif;
+		}
+		#screen-lock * {
+			box-sizing: border-box;
+		}
+
+		.neural-mesh {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			pointer-events: none;
+			overflow: hidden;
+			z-index: 0;
+		}
+		.orb {
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(90px);
+			opacity: 0.45;
+			animation: floatOrb 18s ease-in-out infinite alternate;
+		}
+		.orb-1 {
+			width: 450px;
+			height: 450px;
+			background: radial-gradient(circle, #3b82f6, #00f0ff);
+			top: -10%;
+			left: 15%;
+		}
+		.orb-2 {
+			width: 500px;
+			height: 500px;
+			background: radial-gradient(circle, #8b5cf6, #ec4899);
+			bottom: -15%;
+			right: 15%;
+			animation-delay: -7s;
+		}
+		.orb-3 {
+			width: 350px;
+			height: 350px;
+			background: radial-gradient(circle, #10b981, #06b6d4);
+			top: 40%;
+			left: 55%;
+			opacity: 0.25;
+			animation-delay: -12s;
+		}
+		@keyframes floatOrb {
+			0% { transform: translate(0, 0) scale(1); }
+			50% { transform: translate(60px, -40px) scale(1.15); }
+			100% { transform: translate(-40px, 50px) scale(0.95); }
+		}
+
+		.ai-glass-card {
+			position: relative;
+			z-index: 10;
+			width: 100%;
+			max-width: 440px;
+			background: rgba(18, 20, 29, 0.72);
+			backdrop-filter: blur(28px) saturate(190%);
+			-webkit-backdrop-filter: blur(28px) saturate(190%);
+			border: 1px solid rgba(255, 255, 255, 0.14);
+			border-radius: 28px;
+			padding: 38px 32px 34px;
+			box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 40px rgba(0, 240, 255, 0.1);
+			text-align: center;
+		}
+
+		.mac-window-dots {
+			position: absolute;
+			top: 18px;
+			left: 20px;
+			display: flex;
+			gap: 8px;
+		}
+		.mac-dot {
+			width: 11px;
+			height: 11px;
+			border-radius: 50%;
+			display: inline-block;
+		}
+		.dot-close { background: #ff5f56; box-shadow: 0 0 6px rgba(255,95,86,0.6); }
+		.dot-min { background: #ffbd2e; box-shadow: 0 0 6px rgba(255,189,46,0.6); }
+		.dot-max { background: #27c93f; box-shadow: 0 0 6px rgba(39,201,63,0.6); }
+
+		.ai-shield-wrapper {
+			position: relative;
+			width: 82px;
+			height: 82px;
+			margin: 10px auto 22px;
+		}
+		.ai-shield-ring {
+			position: absolute;
+			inset: -6px;
+			border-radius: 50%;
+			background: conic-gradient(from 0deg, #00f0ff, #8b5cf6, #10b981, #00f0ff);
+			animation: rotateRing 6s linear infinite;
+			filter: blur(4px);
+			opacity: 0.85;
+		}
+		@keyframes rotateRing {
+			to { transform: rotate(360deg); }
+		}
+		.ai-shield-core {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(145deg, #1f2438, #0e111d);
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #00f0ff;
+			font-size: 32px;
+			box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.5);
+		}
+
+		.ai-title {
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 23px;
+			font-weight: 700;
+			letter-spacing: -0.5px;
+			color: #ffffff;
+			margin-bottom: 6px;
+			background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+		}
+		.ai-subtitle {
+			font-size: 13px;
+			color: #94a3b8;
+			line-height: 1.45;
+			margin-bottom: 26px;
+		}
+
+		.input-group {
+			position: relative;
+			margin-bottom: 18px;
+		}
+		.lock-input {
+			width: 100%;
+			background: rgba(10, 12, 19, 0.7);
+			border: 1.5px solid rgba(255, 255, 255, 0.12);
+			border-radius: 16px;
+			padding: 15px 48px 15px 44px;
+			font-size: 14.5px;
+			color: #ffffff;
+			font-family: inherit;
+			outline: none;
+			transition: all 0.25s;
+		}
+		.lock-input:focus {
+			border-color: #00f0ff;
+			box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.08);
+			background: rgba(15, 18, 28, 0.85);
+		}
+		.input-icon-left {
+			position: absolute;
+			left: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #64748b;
+			font-size: 15px;
+			pointer-events: none;
+		}
+		.lock-input:focus ~ .input-icon-left {
+			color: #00f0ff;
+		}
+		.input-icon-right {
+			position: absolute;
+			right: 14px;
+			top: 50%;
+			transform: translateY(-50%);
+			background: transparent;
+			border: none;
+			color: #64748b;
+			font-size: 15px;
+			cursor: pointer;
+			padding: 6px;
+			border-radius: 8px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.input-icon-right:hover {
+			color: #cbd5e1;
+		}
+
+		.btn-ai-unlock {
+			width: 100%;
+			padding: 15px;
+			border-radius: 16px;
+			border: none;
+			font-family: 'Space Grotesk', sans-serif;
+			font-size: 14.5px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+			color: #060911;
+			background: linear-gradient(135deg, #00f0ff 0%, #38bdf8 40%, #818cf8 100%);
+			box-shadow: 0 8px 25px rgba(0, 240, 255, 0.35);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			transition: transform 0.15s, box-shadow 0.2s;
+		}
+		.btn-ai-unlock:hover {
+			filter: brightness(1.08);
+			box-shadow: 0 10px 32px rgba(0, 240, 255, 0.5);
+			transform: translateY(-1px);
+		}
+		.btn-ai-unlock:active {
+			transform: scale(0.98);
+		}
+
+		.lock-footer-info {
+			margin-top: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 14px;
+			font-size: 11.5px;
+			color: #64748b;
+		}
+		.security-badge {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			background: rgba(255, 255, 255, 0.04);
+			padding: 5px 10px;
+			border-radius: 20px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+		}
+		.security-badge i {
+			color: #10b981;
+			font-size: 10px;
+		}
+
+		.shake-error {
+			animation: shakeAnim 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+		}
+		@keyframes shakeAnim {
+			10%, 90% { transform: translate3d(-2px, 0, 0); }
+			20%, 80% { transform: translate3d(4px, 0, 0); }
+			30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+			40%, 60% { transform: translate3d(6px, 0, 0); }
+		}
+
+		/* =========================================================
+		   2. ROYAL SUNHARA GOLD ADMIN CONSOLE (admin@8565)
+		   ========================================================= */
+		#screen-admin {
+			justify-content: center;
+			align-items: center;
+			padding: 30px 20px;
+			background: radial-gradient(circle at 50% 15%, #2a200a 0%, #151004 50%, #080602 100%);
+			overflow-y: auto;
+			font-family: 'Outfit', sans-serif;
+		}
+		#screen-admin * {
+			box-sizing: border-box;
+		}
+
+		.gold-mesh {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			pointer-events: none;
+			overflow: hidden;
+			z-index: 0;
+		}
+		.gold-orb {
+			position: absolute;
+			border-radius: 50%;
+			filter: blur(100px);
+			opacity: 0.28;
+		}
+		.gold-orb-1 {
+			width: 500px;
+			height: 500px;
+			background: radial-gradient(circle, #ffd700, #b8860b);
+			top: -15%;
+			right: 10%;
+		}
+		.gold-orb-2 {
+			width: 420px;
+			height: 420px;
+			background: radial-gradient(circle, #e6b800, #805b00);
+			bottom: -10%;
+			left: 5%;
+		}
+
+		.admin-gold-container {
+			position: relative;
+			z-index: 10;
+			width: 100%;
+			max-width: 680px;
+			background: rgba(22, 17, 7, 0.88);
+			backdrop-filter: blur(32px) saturate(180%);
+			-webkit-backdrop-filter: blur(32px) saturate(180%);
+			border: 1.5px solid rgba(212, 175, 55, 0.4);
+			border-radius: 28px;
+			padding: 40px;
+			box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 50px rgba(212, 175, 55, 0.18);
+		}
+
+		.gold-header {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+		.gold-crown-icon {
+			width: 76px;
+			height: 76px;
+			margin: 0 auto 16px;
+			background: linear-gradient(145deg, #2e2308, #181204);
+			border: 1.5px solid rgba(255, 215, 0, 0.5);
+			border-radius: 22px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 34px;
+			color: #ffd700;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.25);
+		}
+		.gold-title {
+			font-family: 'Cinzel', serif;
+			font-size: 27px;
+			font-weight: 700;
+			letter-spacing: 1.5px;
+			background: linear-gradient(135deg, #FFF099 0%, #D4AF37 40%, #AA771C 80%, #664608 100%);
+			-webkit-background-clip: text;
+			-webkit-text-fill-color: transparent;
+			margin-bottom: 6px;
+			text-transform: uppercase;
+		}
+		.gold-sub {
+			font-size: 13px;
+			color: #d1b87a;
+		}
+
+		.gold-box {
+			background: rgba(35, 27, 10, 0.65);
+			border: 1px solid rgba(212, 175, 55, 0.25);
+			border-radius: 18px;
+			padding: 24px;
+			margin-bottom: 20px;
+		}
+		.gold-box-title {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-family: 'Cinzel', serif;
+			font-size: 15.5px;
+			font-weight: 700;
+			color: #ffdf73;
+			margin-bottom: 16px;
+		}
+		.gold-box-title i {
+			color: #ffd700;
+		}
+
+		.current-pass-row {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: rgba(14, 11, 4, 0.85);
+			border: 1px solid rgba(212, 175, 55, 0.25);
+			border-radius: 12px;
+			padding: 12px 18px;
+			margin-bottom: 12px;
+		}
+		.current-pass-text {
+			font-family: 'Space Grotesk', monospace;
+			font-size: 17px;
+			font-weight: 600;
+			letter-spacing: 2px;
+			color: #ffffff;
+		}
+
+		.gold-form-group {
+			margin-bottom: 16px;
+		}
+		.gold-label {
+			display: block;
+			font-size: 11.5px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			color: #d1b87a;
+			margin-bottom: 6px;
+		}
+		.gold-input {
+			width: 100%;
+			background: rgba(12, 9, 3, 0.75);
+			border: 1.5px solid rgba(212, 175, 55, 0.28);
+			border-radius: 14px;
+			padding: 13px 16px;
+			font-size: 14px;
+			color: #ffffff;
+			outline: none;
+			font-family: inherit;
+			transition: all 0.25s;
+		}
+		.gold-input:focus {
+			border-color: #ffd700;
+			box-shadow: 0 0 18px rgba(255, 215, 0, 0.3);
+			background: rgba(20, 15, 5, 0.9);
+		}
+
+		.gold-btn-primary {
+			width: 100%;
+			padding: 14px;
+			border-radius: 14px;
+			border: none;
+			font-family: 'Cinzel', serif;
+			font-size: 14px;
+			font-weight: 700;
+			letter-spacing: 1.2px;
+			text-transform: uppercase;
+			color: #1a1202;
+			background: linear-gradient(135deg, #FFF099 0%, #D4AF37 40%, #AA771C 80%, #664608 100%);
+			box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 10px;
+			transition: all 0.2s;
+		}
+		.gold-btn-primary:hover {
+			filter: brightness(1.1);
+			transform: translateY(-1px);
+		}
+
+		.admin-actions-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+			gap: 12px;
+			margin-top: 18px;
+		}
+		.gold-btn-secondary {
+			padding: 12px 16px;
+			border-radius: 12px;
+			border: 1px solid rgba(212, 175, 55, 0.35);
+			background: rgba(30, 23, 8, 0.75);
+			color: #ffd700;
+			font-size: 13px;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 8px;
+			transition: all 0.2s;
+		}
+		.gold-btn-secondary:hover {
+			background: rgba(50, 38, 12, 0.9);
+			border-color: #ffd700;
+		}
+		.gold-btn-danger {
+			color: #ff7675;
+			border-color: rgba(255, 118, 117, 0.35);
+		}
+		.gold-btn-danger:hover {
+			background: rgba(70, 20, 20, 0.7);
+			border-color: #ff7675;
+		}
+
+		/* =========================================================
+		   3. EXACT ORIGINAL FARMER ID CARD & MAC THEME STYLES
+		   (Strictly preserved 100.0% unchanged from user code)
+		   ========================================================= */
+		#screen-dashboard {
+			flex-direction: column;
+			align-items: center;
+			padding-top: 15px;
+			padding-bottom: 40px;
+			background: linear-gradient(135deg, #1c1c1e 0%, #000000 100%);
+		}
+
+		/* Top sleek status & security bar */
+		.mac-top-bar {
+			box-sizing: border-box;
+			width: 100%;
+			max-width: 980px;
+			background: rgba(35, 35, 38, 0.75);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+			border: 1px solid rgba(255, 255, 255, 0.1);
+			border-radius: 18px;
+			padding: 8px 18px;
+			margin-bottom: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			font-family: 'Outfit', sans-serif;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+		}
+		.mac-top-bar * {
+			box-sizing: border-box;
+		}
+		.bar-brand {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+		.bar-title {
+			font-size: 13.5px;
+			font-weight: 600;
+			color: #ffffff;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+		.status-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 11px;
+			padding: 3px 10px;
+			border-radius: 12px;
+			background: rgba(16, 185, 129, 0.15);
+			color: #10b981;
+			border: 1px solid rgba(16, 185, 129, 0.3);
+		}
+		.status-pill.admin-active {
+			background: rgba(255, 215, 0, 0.15);
+			color: #ffd700;
+			border-color: rgba(255, 215, 0, 0.3);
+		}
+		.bar-controls {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+		.session-badge {
+			font-size: 12px;
+			color: #94a3b8;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			background: rgba(0, 0, 0, 0.3);
+			padding: 5px 12px;
+			border-radius: 10px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+		}
+		.bar-btn {
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.12);
+			color: #ffffff;
+			border-radius: 10px;
+			padding: 6px 14px;
+			font-size: 12px;
+			font-weight: 600;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			transition: all 0.2s;
+		}
+		.bar-btn:hover {
+			background: rgba(255, 255, 255, 0.15);
+		}
+		.bar-btn.gold-highlight {
+			background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(212, 175, 55, 0.15));
+			color: #ffd700;
+			border-color: rgba(255, 215, 0, 0.4);
+		}
+
+		/* Main wrapper to hold card and action buttons side-by-side (EXACT ORIGINAL) */
 		.main-wrapper {
 			display: flex;
 			align-items: center;
 			gap: 20px;
 		}
 
-		/* The main ID card container */
+		/* The main ID card container (EXACT ORIGINAL PIXEL-FOR-PIXEL) */
 		.id-card-container {
 			position: relative; 
 			border: solid 1pt #444; 
@@ -39,6 +635,7 @@
 			background-color: white; 
 			box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 			border-radius: 4px;
+			font-family: Arial, sans-serif;
 		}
 
 		.editable-field {
@@ -51,7 +648,7 @@
 			background-color: #f9f9f9;
 		}
 
-		/* Left details row layout */
+		/* Left details row layout (EXACT ORIGINAL) */
 		.info-row {
 			display: flex;
 			align-items: center;
@@ -66,7 +663,7 @@
 			display: inline-block;
 		}
 		
-		/* Dynamic Land Details Table Styling */
+		/* Dynamic Land Details Table Styling (EXACT ORIGINAL) */
 		.land-table {
 			border-collapse: collapse;
 			width: 232pt;
@@ -85,28 +682,30 @@
 		.land-table th {
 			font-weight: bold;
 			background-color: transparent;
+			color: #000000;
 		}
 		.land-table td {
 			outline: none;
+			color: #000000;
 		}
 		.land-table td:focus {
 			background-color: #e8f4e8;
 		}
 
-		/* Column widths distribution */
+		/* Column widths distribution (EXACT ORIGINAL) */
 		.land-table th:nth-child(1), .land-table td:nth-child(1) { width: 34%; }
 		.land-table th:nth-child(2), .land-table td:nth-child(2) { width: 24%; }
 		.land-table th:nth-child(3), .land-table td:nth-child(3) { width: 20%; }
 		.land-table th:nth-child(4), .land-table td:nth-child(4) { width: 22%; }
 
-		/* Summary row compact styling */
+		/* Summary row compact styling (EXACT ORIGINAL) */
 		.summary-row td {
 			padding: 1.5px 3px !important;
 			font-size: 7.2pt !important;
 			line-height: 1.1 !important;
 		}
 		
-		/* Delete button strictly inside table cell */
+		/* Delete button strictly inside table cell (EXACT ORIGINAL) */
 		.delete-row-btn {
 			display: none;
 			position: absolute;
@@ -131,7 +730,7 @@
 			display: block;
 		}
 		
-		/* HD QR Code strictly fixed to original size */
+		/* HD QR Code strictly fixed to original size (EXACT ORIGINAL) */
 		#qrcode {
 			position: absolute; 
 			left: 244.5pt; 
@@ -151,13 +750,13 @@
 			object-fit: contain;
 		}
 
-		/* Drag and Drop visual cue */
+		/* Drag and Drop visual cue (EXACT ORIGINAL) */
 		body.dragover .id-card-container {
 			border: 2px dashed #28c940;
 			opacity: 0.8;
 		}
 
-		/* Mac Style Action Buttons */
+		/* Mac Style Action Buttons (EXACT ORIGINAL) */
 		.action-buttons {
 			display: flex;
 			flex-direction: column;
@@ -168,6 +767,7 @@
 			border-radius: 25px;
 			box-shadow: 0 4px 15px rgba(0,0,0,0.6);
 			border: 1px solid rgba(255,255,255,0.1);
+			box-sizing: border-box;
 		}
 
 		.mac-btn {
@@ -185,6 +785,7 @@
 			box-shadow: inset -2px -2px 5px rgba(0,0,0,0.3), inset 2px 2px 5px rgba(255,255,255,0.2), 2px 2px 5px rgba(0,0,0,0.4);
 			transition: transform 0.1s, box-shadow 0.1s;
 			text-transform: uppercase;
+			box-sizing: border-box;
 		}
 
 		.mac-btn:active {
@@ -196,13 +797,111 @@
 		.btn-print { background-color: #ffbd2e; color: #333; }
 		.btn-reset { background-color: #ff5f56; }
 
+		/* Toast & Dialog Modals */
+		.toast-container {
+			position: fixed;
+			bottom: 24px;
+			right: 24px;
+			z-index: 9999;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			pointer-events: none;
+			font-family: 'Outfit', sans-serif;
+		}
+		.toast-box {
+			pointer-events: auto;
+			min-width: 280px;
+			max-width: 380px;
+			background: rgba(20, 24, 38, 0.95);
+			backdrop-filter: blur(16px);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 14px;
+			padding: 12px 18px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			color: #ffffff;
+			font-size: 13.5px;
+			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+		}
+		.toast-box.toast-success { border-color: rgba(16, 185, 129, 0.6); }
+		.toast-box.toast-error { border-color: rgba(239, 68, 68, 0.6); }
+		.toast-box.toast-gold { border-color: rgba(255, 215, 0, 0.6); }
+
+		.modal-backdrop {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.75);
+			backdrop-filter: blur(8px);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 999;
+			padding: 20px;
+			box-sizing: border-box;
+			font-family: 'Outfit', sans-serif;
+		}
+		.modal-card {
+			background: #1c1c1f;
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 20px;
+			padding: 26px;
+			max-width: 420px;
+			width: 100%;
+			box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+			text-align: center;
+			box-sizing: border-box;
+		}
+		.modal-title {
+			font-size: 18px;
+			font-weight: 700;
+			color: #ffffff;
+			margin-bottom: 8px;
+		}
+		.modal-msg {
+			font-size: 13.5px;
+			color: #94a3b8;
+			margin-bottom: 22px;
+			line-height: 1.4;
+		}
+		.modal-actions {
+			display: flex;
+			gap: 12px;
+		}
+		.modal-btn {
+			flex: 1;
+			padding: 11px;
+			border-radius: 12px;
+			font-size: 13px;
+			font-weight: 600;
+			cursor: pointer;
+			border: none;
+		}
+		.modal-btn-cancel {
+			background: rgba(255, 255, 255, 0.1);
+			color: #cbd5e1;
+		}
+		.modal-btn-confirm {
+			background: #ff5f56;
+			color: white;
+		}
+
 		@media print {
 			body {
 				background: white !important;
 				padding: 0;
 			}
-			.action-buttons {
+			.action-buttons, .mac-top-bar, #screen-lock, #screen-admin, .toast-container, .modal-backdrop {
 				display: none !important;
+			}
+			#screen-dashboard {
+				display: block !important;
+				padding: 0 !important;
+				background: white !important;
+			}
+			.main-wrapper {
+				gap: 0;
 			}
 			.id-card-container {
 				border: none;
@@ -214,115 +913,318 @@
 	</style>
 </head>
 <body>
-	<div class="main-wrapper">
-		<div class="id-card-container" id="cardContainer">
-			<a name="Page1" id="Page1"></a>
-			
-			<!-- Background Image -->
-			<div style="position:absolute; left:34pt; top:34pt">
-				<img style="position:absolute; width:532.5pt; height:166.65pt" src="image1.jpeg" alt="Background" />
-			</div>
-			
-			<!-- Dynamic HD QR Code Section -->
-			<div id="qrcode"></div>
-			
-			<!-- Photo Upload Section -->
-			<div style="position:absolute; left:51.25pt; top:76pt; z-index: 20;" id="photoContainer">
-				<input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="previewImage(event)">
-				<img id="profilePhoto" style="position:absolute; width:51pt; height:60.7pt; cursor:pointer;" src="photo.jpeg" onclick="document.getElementById('photoUpload').click();" title="Click to upload, Paste, or Drag & Drop" alt="Profile Photo" />
-			</div>
-			
-			<!-- Small Icon -->
-			<div style="position:absolute; left:441.5pt; top:185.85pt">
-				<img style="position:absolute; width:9pt; height:9pt" src="image4.png" alt="Icon" />
+
+	<!-- =========================================================
+	     SCREEN 1: NEXT-GEN AI LOCK SCREEN (DEFAULT ENTRY)
+	     ========================================================= -->
+	<section class="view-screen active" id="screen-lock">
+		<div class="neural-mesh">
+			<div class="orb orb-1"></div>
+			<div class="orb orb-2"></div>
+			<div class="orb orb-3"></div>
+		</div>
+
+		<div class="ai-glass-card" id="lockCardBox">
+			<div class="mac-window-dots">
+				<span class="mac-dot dot-close"></span>
+				<span class="mac-dot dot-min"></span>
+				<span class="mac-dot dot-max"></span>
 			</div>
 
-			<!-- Header -->
-			<div style="position:absolute; left:118.75pt; top:48.7pt;">
-				<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold; left:0pt">Government of India</span>
-				<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold; left:274.5pt">Government of India</span>
-			</div>
-
-			<!-- Left Column: Personal Info (Perfect Horizontal Alignment & Equal Vertical Gap) -->
-			<div class="info-row" style="position:absolute; left:120.25pt; top:75pt;">
-				<span class="info-label">Name</span>
-				<span class="editable-field" id="f-name" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">Mohan Lal Yadav</span>
-			</div>
-
-			<div class="info-row" style="position:absolute; left:120.25pt; top:85.5pt;">
-				<span class="info-label">Gender</span>
-				<span class="editable-field" id="f-gender" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">Male</span>
-			</div>
-
-			<div class="info-row" style="position:absolute; left:120.25pt; top:96pt;">
-				<span class="info-label">DOB</span>
-				<span class="editable-field" id="f-dob" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">11/10/1988</span>
-			</div>
-
-			<div class="info-row" style="position:absolute; left:120.25pt; top:106.5pt;">
-				<span class="info-label">Caste</span>
-				<span class="editable-field" id="f-caste" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">General</span>
-			</div>
-
-			<div class="info-row" style="position:absolute; left:120.25pt; top:117pt;">
-				<span class="info-label">Aadhaar</span>
-				<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri'; color:#000000;">[Aadhaar Redacted]</span>
-			</div>
-
-			<!-- Right Column: Address (Editable) -->
-			<div style="position:absolute; left:326.45pt; top:68pt;">
-				<span style="font-size:11pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Address</span>
-			</div>
-			<div style="position:absolute; left:326.45pt; top:82pt; width:230pt;">
-				<div class="editable-field" id="f-address" contenteditable="true" style="font-size:8pt; font-family: 'Calibri'; color:#000000; line-height:1.2;">
-					S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208
+			<div class="ai-shield-wrapper">
+				<div class="ai-shield-ring"></div>
+				<div class="ai-shield-core">
+					<i class="fa-solid fa-fingerprint"></i>
 				</div>
 			</div>
 
-			<!-- Dynamic Editable Land Table -->
-			<div style="position:absolute; left:326.45pt; top:103pt;">
-				<table class="land-table" id="landDetailsTable">
-					<thead>
-						<tr>
-							<th>Village</th>
-							<th>Owner Number</th>
-							<th>Khasra</th>
-							<th>Area</th>
-						</tr>
-					</thead>
-					<tbody id="table-body">
-						<tr>
-							<td contenteditable="true">Barhara</td>
-							<td contenteditable="true">1</td>
-							<td contenteditable="true">33</td>
-							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
-						</tr>
-					</tbody>
-				</table>
+			<h1 class="ai-title">UP Farmer Portal</h1>
+			<p class="ai-subtitle">Enter your biometric access key or admin credentials to unlock the Farmer ID management system.</p>
+
+			<div class="input-group">
+				<i class="fa-solid fa-lock input-icon-left"></i>
+				<input type="password" id="sitePasswordInput" class="lock-input" placeholder="Enter Access Password..." autocomplete="current-password" />
+				<button type="button" class="input-icon-right" id="togglePasswordBtn" title="Toggle visibility">
+					<i class="fa-regular fa-eye" id="togglePasswordIcon"></i>
+				</button>
 			</div>
 
-			<!-- Bottom Sections -->
-			<div style="position:absolute; left:100pt; top:162.95pt;">
-				<span style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman'; color:#006300; font-weight:bold;">Farmer ID : <span class="editable-field" id="f-id" contenteditable="true">4764 1358 808</span></span>
-			</div>
-			<div style="position:absolute; left:100.6pt; top:184.55pt;">
-				<span style="font-size:12.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#000000; font-weight:bold;">Uttar Pradesh Farmer Registry</span>
-			</div>
-			<div style="position:absolute; left:100.6pt; top:185.85pt;">
-				<span style="position:absolute; white-space:pre; font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman'; color:#333333; font-weight:bold; left:355.9pt">www.upfr.agristack.gov.in</span>
+			<button type="button" class="btn-ai-unlock" id="btnUnlockSubmit">
+				<span>Unlock Secure Terminal</span>
+				<i class="fa-solid fa-arrow-right"></i>
+			</button>
+
+			<div class="lock-footer-info">
+				<div class="security-badge">
+					<i class="fa-solid fa-shield-halved"></i>
+					<span>8-Hour Session Guard</span>
+				</div>
+				<div class="security-badge">
+					<i class="fa-solid fa-bolt"></i>
+					<span>Hardware Encrypted</span>
+				</div>
 			</div>
 		</div>
+	</section>
 
-		<!-- Action Buttons Container (Right Side) -->
-		<div class="action-buttons">
-			<button class="mac-btn btn-save" onclick="saveData()" title="Save Data to Local Storage">Save</button>
-			<button class="mac-btn btn-print" onclick="window.print()" title="Print ID Card">Print</button>
-			<button class="mac-btn btn-reset" onclick="resetData()" title="Reset to Default">Reset</button>
+	<!-- =========================================================
+	     SCREEN 2: ROYAL SUNHARA GOLD ADMIN CONSOLE (admin@8565)
+	     ========================================================= -->
+	<section class="view-screen" id="screen-admin">
+		<div class="gold-mesh">
+			<div class="gold-orb gold-orb-1"></div>
+			<div class="gold-orb gold-orb-2"></div>
+		</div>
+
+		<div class="admin-gold-container">
+			<div class="gold-header">
+				<div class="gold-crown-icon">
+					<i class="fa-solid fa-crown"></i>
+				</div>
+				<h1 class="gold-title">Supreme Admin Console</h1>
+				<p class="gold-sub">Protected by Master Key: <code>admin@8565</code> | 8-Hour Session Active</p>
+			</div>
+
+			<!-- Box 1: Current Password Status -->
+			<div class="gold-box">
+				<div class="gold-box-title">
+					<i class="fa-solid fa-key"></i>
+					<span>Current Active User Password</span>
+				</div>
+				<div class="current-pass-row">
+					<div>
+						<div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: #d1b87a; margin-bottom: 2px;">Normal Access Key</div>
+						<div class="current-pass-text" id="displayCurrentPass">••••••••••</div>
+					</div>
+					<div style="display: flex; gap: 8px; align-items: center;">
+						<button type="button" class="gold-btn-secondary" id="btnPeekCurrentPass" style="padding: 6px 12px; font-size: 12px;">
+							<i class="fa-regular fa-eye" id="peekPassIcon"></i>
+							<span id="peekPassLabel">Show</span>
+						</button>
+						<button type="button" class="gold-btn-secondary" id="btnCopyCurrentPass" style="padding: 6px 12px; font-size: 12px;">
+							<i class="fa-regular fa-copy"></i>
+							<span>Copy</span>
+						</button>
+					</div>
+				</div>
+				<div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #baa368;">
+					<span>Default: <code>Vivek@9695</code></span>
+					<span style="color:#ffd700;"><i class="fa-solid fa-circle-check"></i> Live Sync</span>
+				</div>
+			</div>
+
+			<!-- Box 2: Update Password Form -->
+			<div class="gold-box">
+				<div class="gold-box-title">
+					<i class="fa-solid fa-wand-magic-sparkles"></i>
+					<span>Modify User Password</span>
+				</div>
+				<div class="gold-form-group">
+					<label class="gold-label" for="newAdminPassInput">New Normal Password</label>
+					<input type="password" id="newAdminPassInput" class="gold-input" placeholder="e.g. NewSecret@2026" />
+				</div>
+				<div class="gold-form-group">
+					<label class="gold-label" for="confirmAdminPassInput">Confirm New Password</label>
+					<input type="password" id="confirmAdminPassInput" class="gold-input" placeholder="Repeat new password..." />
+				</div>
+				<button type="button" class="gold-btn-primary" id="btnSaveNewUserPass">
+					<i class="fa-solid fa-floppy-disk"></i>
+					<span>Update & Deploy Password</span>
+				</button>
+			</div>
+
+			<!-- Box 3: Quick Admin Nav & Session Termination -->
+			<div class="admin-actions-grid">
+				<button type="button" class="gold-btn-secondary" id="btnGoToCard">
+					<i class="fa-solid fa-id-card"></i>
+					<span>Open Farmer ID Card</span>
+				</button>
+				<button type="button" class="gold-btn-secondary" id="btnResetDefaultPass">
+					<i class="fa-solid fa-rotate-left"></i>
+					<span>Reset Pass to Vivek@9695</span>
+				</button>
+				<button type="button" class="gold-btn-secondary gold-btn-danger" id="btnAdminLogout">
+					<i class="fa-solid fa-right-from-bracket"></i>
+					<span>Lock Terminal (Logout)</span>
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- =========================================================
+	     SCREEN 3: EXACT FARMER ID CARD WORKSPACE
+	     ========================================================= -->
+	<section class="view-screen" id="screen-dashboard">
+		<!-- Sleek Top Floating Mac Navigation Bar -->
+		<header class="mac-top-bar">
+			<div class="bar-brand">
+				<div class="mac-window-dots" style="position: static;">
+					<span class="mac-dot dot-close"></span>
+					<span class="mac-dot dot-min"></span>
+					<span class="mac-dot dot-max"></span>
+				</div>
+				<div class="bar-title">
+					<span>UP Farmer ID Studio</span>
+					<span class="status-pill" id="dashboardRoleBadge">
+						<i class="fa-solid fa-circle"></i>
+						<span id="roleBadgeText">User Mode</span>
+					</span>
+				</div>
+			</div>
+			<div class="bar-controls">
+				<div class="session-badge" title="8-hour security session">
+					<i class="fa-regular fa-clock"></i>
+					<span id="sessionTimerText">Valid: 8h 00m</span>
+				</div>
+				<button type="button" class="bar-btn gold-highlight" id="btnNavToAdmin" style="display: none;">
+					<i class="fa-solid fa-crown"></i>
+					<span>Admin Suite</span>
+				</button>
+				<button type="button" class="bar-btn" id="btnUserLogout" title="Lock the application">
+					<i class="fa-solid fa-lock"></i>
+					<span>Lock</span>
+				</button>
+			</div>
+		</header>
+
+		<!-- Card and Action Buttons Wrapper (100% EXACT ORIGINAL) -->
+		<div class="main-wrapper">
+			<div class="id-card-container" id="cardContainer">
+				<a name="Page1" id="Page1"></a>
+				
+				<!-- Background Image (100% EXACT ORIGINAL POSITION & SIZE) -->
+				<div style="position:absolute; left:34pt; top:34pt">
+					<img id="bgCardImg" style="position:absolute; width:532.5pt; height:166.65pt" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22710%22%20height%3D%22222%22%20viewBox%3D%220%200%20710%20222%22%3E%0A%20%20%3Cdefs%3E%0A%20%20%20%20%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%25%22%20y1%3D%220%25%22%20x2%3D%22100%25%22%20y2%3D%22100%25%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23ffffff%22/%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23f8fbf7%22/%3E%0A%20%20%20%20%3C/linearGradient%3E%0A%20%20%3C/defs%3E%0A%20%20%3Crect%20width%3D%22710%22%20height%3D%22222%22%20fill%3D%22url%28%23g%29%22%20stroke%3D%22%23b8d4b8%22%20stroke-width%3D%221%22/%3E%0A%20%20%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%22700%22%20height%3D%22212%22%20fill%3D%22none%22%20stroke%3D%22%23006300%22%20stroke-width%3D%220.75%22%20stroke-dasharray%3D%224%2C2%22%20opacity%3D%220.4%22/%3E%0A%3C/svg%3E" alt="Background" />
+				</div>
+				
+				<!-- Dynamic HD QR Code Section -->
+				<div id="qrcode"></div>
+				
+				<!-- Photo Upload Section (100% EXACT ORIGINAL POSITION & SIZE) -->
+				<div style="position:absolute; left:51.25pt; top:76pt; z-index: 20;" id="photoContainer">
+					<input type="file" id="photoUpload" accept="image/*" style="display: none;" />
+					<img id="profilePhoto" style="position:absolute; width:51pt; height:60.7pt; cursor:pointer;" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2268%22%20height%3D%2281%22%20viewBox%3D%220%200%2068%2081%22%3E%0A%20%20%3Crect%20width%3D%2268%22%20height%3D%2281%22%20fill%3D%22%23e2e8f0%22/%3E%0A%20%20%3Ccircle%20cx%3D%2234%22%20cy%3D%2228%22%20r%3D%2216%22%20fill%3D%22%2394a3b8%22/%3E%0A%20%20%3Cpath%20d%3D%22M10%2072%20C10%2050%2C%2058%2050%2C%2058%2072%20Z%22%20fill%3D%22%2394a3b8%22/%3E%0A%3C/svg%3E" title="Click to upload, Paste, or Drag & Drop" alt="Profile Photo" />
+				</div>
+				
+				<!-- Small Icon (100% EXACT ORIGINAL POSITION & SIZE) -->
+				<div style="position:absolute; left:441.5pt; top:185.85pt">
+					<img id="smallIcon" style="position:absolute; width:9pt; height:9pt" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%0A%20%20%3Ccircle%20cx%3D%226%22%20cy%3D%226%22%20r%3D%225%22%20fill%3D%22%23006300%22%20opacity%3D%220.8%22/%3E%0A%3C/svg%3E" alt="Icon" />
+				</div>
+
+				<!-- Header (100% EXACT ORIGINAL) -->
+				<div style="position:absolute; left:118.75pt; top:48.7pt;">
+					<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#006300; font-weight:bold; left:0pt">Government of India</span>
+					<span style="position:absolute; white-space:pre; font-size:14pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#006300; font-weight:bold; left:274.5pt">Government of India</span>
+				</div>
+
+				<!-- Left Column: Personal Info (100% EXACT ORIGINAL) -->
+				<div class="info-row" style="position:absolute; left:120.25pt; top:75pt;">
+					<span class="info-label">Name</span>
+					<span class="editable-field" id="f-name" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri', sans-serif; color:#000000;">Mohan Lal Yadav</span>
+				</div>
+
+				<div class="info-row" style="position:absolute; left:120.25pt; top:85.5pt;">
+					<span class="info-label">Gender</span>
+					<span class="editable-field" id="f-gender" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri', sans-serif; color:#000000;">Male</span>
+				</div>
+
+				<div class="info-row" style="position:absolute; left:120.25pt; top:96pt;">
+					<span class="info-label">DOB</span>
+					<span class="editable-field" id="f-dob" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri', sans-serif; color:#000000;">11/10/1988</span>
+				</div>
+
+				<div class="info-row" style="position:absolute; left:120.25pt; top:106.5pt;">
+					<span class="info-label">Caste</span>
+					<span class="editable-field" id="f-caste" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri', sans-serif; color:#000000;">General</span>
+				</div>
+
+				<div class="info-row" style="position:absolute; left:120.25pt; top:117pt;">
+					<span class="info-label">Aadhaar</span>
+					<span class="editable-field" id="f-aadhaar" contenteditable="true" style="font-size:7.5pt; font-family: 'Calibri', sans-serif; color:#000000;">809055328596</span>
+				</div>
+
+				<!-- Right Column: Address (100% EXACT ORIGINAL) -->
+				<div style="position:absolute; left:326.45pt; top:68pt;">
+					<span style="font-size:11pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#000000; font-weight:bold;">Address</span>
+				</div>
+				<div style="position:absolute; left:326.45pt; top:82pt; width:230pt;">
+					<div class="editable-field" id="f-address" contenteditable="true" style="font-size:8pt; font-family: 'Calibri', sans-serif; color:#000000; line-height:1.2;">
+						S/o Bhuwaneshwar Yadav, village-karmel banarahi,, Karmel Banrahi, Rudrapur, DEORIA, UTTAR PRADESH, 274208
+					</div>
+				</div>
+
+				<!-- Dynamic Editable Land Table (100% EXACT ORIGINAL) -->
+				<div style="position:absolute; left:326.45pt; top:103pt;">
+					<table class="land-table" id="landDetailsTable">
+						<thead>
+							<tr>
+								<th>Village</th>
+								<th>Owner Number</th>
+								<th>Khasra</th>
+								<th>Area</th>
+							</tr>
+						</thead>
+						<tbody id="table-body">
+							<tr>
+								<td contenteditable="true">Barhara</td>
+								<td contenteditable="true">1</td>
+								<td contenteditable="true">33</td>
+								<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" title="Delete Row">×</button></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- Bottom Sections (100% EXACT ORIGINAL) -->
+				<div style="position:absolute; left:100pt; top:162.95pt;">
+					<span style="font-size:12pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#006300; font-weight:bold;">Farmer ID : <span class="editable-field" id="f-id" contenteditable="true">4764 1358 808</span></span>
+				</div>
+				<div style="position:absolute; left:100.6pt; top:184.55pt;">
+					<span style="font-size:12.5pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#000000; font-weight:bold;">Uttar Pradesh Farmer Registry</span>
+				</div>
+				<div style="position:absolute; left:100.6pt; top:185.85pt;">
+					<span style="position:absolute; white-space:pre; font-size:9.5pt; font-family: 'OOYQFC+TimesNewRoman', 'Times New Roman', serif; color:#333333; font-weight:bold; left:355.9pt">www.upfr.agristack.gov.in</span>
+				</div>
+			</div>
+
+			<!-- Action Buttons Container (Right Side) (100% EXACT ORIGINAL) -->
+			<div class="action-buttons">
+				<button type="button" class="mac-btn btn-save" id="btnSaveCard" title="Save Data to Local Storage">Save</button>
+				<button type="button" class="mac-btn btn-print" id="btnPrintCard" title="Print ID Card">Print</button>
+				<button type="button" class="mac-btn btn-reset" id="btnResetCardPrompt" title="Reset to Default">Reset</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- =========================================================
+	     TOAST & MODAL NOTIFICATIONS
+	     ========================================================= -->
+	<div class="toast-container" id="toastContainer"></div>
+
+	<!-- Custom Reset Confirmation Modal -->
+	<div class="modal-backdrop" id="confirmResetModal">
+		<div class="modal-card">
+			<div class="modal-title">Reset Card Data?</div>
+			<p class="modal-msg">Are you sure you want to restore default farmer credentials? All unsaved manual changes will be lost.</p>
+			<div class="modal-actions">
+				<button type="button" class="modal-btn modal-btn-cancel" id="btnCancelModalReset">Cancel</button>
+				<button type="button" class="modal-btn modal-btn-confirm" id="btnConfirmModalReset">Reset All</button>
+			</div>
 		</div>
 	</div>
 
+	<!-- =========================================================
+	     JAVASCRIPT LOGIC
+	     ========================================================= -->
 	<script>
-		// --- State Management (Local Storage) ---
+		// --- Security & Session Constants ---
+		const MASTER_ADMIN_PASS = "admin@8565";
+		const DEFAULT_USER_PASS = "Vivek@9695";
+		const SESSION_TIMEOUT_MS = 8 * 60 * 60 * 1000; // 8 Hours in milliseconds
+
+		const KEY_USER_PASS = "farmer_up_user_password";
+		const KEY_AUTH_ROLE = "farmer_auth_role";
+		const KEY_AUTH_TIME = "farmer_auth_timestamp";
 		const STORAGE_KEY = 'farmer_id_data';
 
 		const DEFAULT_DATA = {
@@ -337,12 +1239,263 @@
 							<td contenteditable="true">Barhara</td>
 							<td contenteditable="true">1</td>
 							<td contenteditable="true">33</td>
-							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button></td>
+							<td contenteditable="true" class="area-cell" style="position:relative;">0.0141<button type="button" class="delete-row-btn" title="Delete Row">×</button></td>
 						</tr>`,
-			photoSrc: "photo.jpeg"
+			photoSrc: "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2268%22%20height%3D%2281%22%20viewBox%3D%220%200%2068%2081%22%3E%0A%20%20%3Crect%20width%3D%2268%22%20height%3D%2281%22%20fill%3D%22%23e2e8f0%22/%3E%0A%20%20%3Ccircle%20cx%3D%2234%22%20cy%3D%2228%22%20r%3D%2216%22%20fill%3D%22%2394a3b8%22/%3E%0A%20%20%3Cpath%20d%3D%22M10%2072%20C10%2050%2C%2058%2050%2C%2058%2072%20Z%22%20fill%3D%22%2394a3b8%22/%3E%0A%3C/svg%3E"
 		};
 
-		function saveData() {
+		// --- Safe LocalStorage Access ---
+		function safeStorageGet(key, fallback = null) {
+			try {
+				const val = localStorage.getItem(key);
+				return val !== null ? val : fallback;
+			} catch (e) {
+				return fallback;
+			}
+		}
+
+		function safeStorageSet(key, value) {
+			try {
+				localStorage.setItem(key, value);
+			} catch (e) {
+				console.warn("Storage write error", e);
+			}
+		}
+
+		function safeStorageRemove(key) {
+			try {
+				localStorage.removeItem(key);
+			} catch (e) {
+				console.warn("Storage remove error", e);
+			}
+		}
+
+		function getActiveUserPassword() {
+			return safeStorageGet(KEY_USER_PASS, DEFAULT_USER_PASS);
+		}
+
+		// Automatically load GitHub repository images if present in repo
+		function autoLoadRepoAssets() {
+			const bg = document.getElementById('bgCardImg');
+			const testBg = new Image();
+			testBg.onload = () => { bg.src = 'image1.jpeg'; };
+			testBg.src = 'image1.jpeg';
+
+			const photo = document.getElementById('profilePhoto');
+			const testPhoto = new Image();
+			testPhoto.onload = () => { 
+				if (!localStorage.getItem('farmer_id_data')) {
+					photo.src = 'photo.jpeg'; 
+				}
+			};
+			testPhoto.src = 'photo.jpeg';
+
+			const icon = document.getElementById('smallIcon');
+			const testIcon = new Image();
+			testIcon.onload = () => { icon.src = 'image4.png'; };
+			testIcon.src = 'image4.png';
+		}
+
+		// Toast Notification Helper
+		function showToast(message, type = "normal") {
+			const container = document.getElementById("toastContainer");
+			const toast = document.createElement("div");
+			toast.className = `toast-box toast-${type}`;
+			
+			let iconClass = "fa-circle-info";
+			if (type === "success") iconClass = "fa-circle-check";
+			if (type === "error") iconClass = "fa-circle-exclamation";
+			if (type === "gold") iconClass = "fa-crown";
+
+			toast.innerHTML = `
+				<i class="fa-solid ${iconClass}" style="font-size:18px;"></i>
+				<div style="flex:1;">${message}</div>
+			`;
+			container.appendChild(toast);
+
+			setTimeout(() => {
+				toast.style.opacity = '0';
+				toast.style.transform = 'translateY(15px)';
+				toast.style.transition = 'all 0.3s ease';
+				setTimeout(() => toast.remove(), 300);
+			}, 3500);
+		}
+
+		// Screen Routing
+		function switchScreen(screenId) {
+			const screens = document.querySelectorAll(".view-screen");
+			screens.forEach(s => s.classList.remove("active"));
+			
+			const target = document.getElementById(screenId);
+			if (target) {
+				target.classList.add("active");
+			}
+
+			if (screenId === "screen-admin") {
+				renderAdminView();
+			} else if (screenId === "screen-dashboard") {
+				loadCardData();
+				updateQRCode();
+				updateTopBar();
+				autoLoadRepoAssets();
+			} else if (screenId === "screen-lock") {
+				const input = document.getElementById("sitePasswordInput");
+				if (input) {
+					input.value = "";
+					setTimeout(() => input.focus(), 200);
+				}
+			}
+		}
+
+		// Session Validation (8 Hours)
+		function checkSessionStatus() {
+			const role = safeStorageGet(KEY_AUTH_ROLE);
+			const loginTimestamp = parseInt(safeStorageGet(KEY_AUTH_TIME, "0"), 10);
+			const now = Date.now();
+
+			if (role && loginTimestamp && (now - loginTimestamp < SESSION_TIMEOUT_MS)) {
+				return { valid: true, role: role, remainingMs: SESSION_TIMEOUT_MS - (now - loginTimestamp) };
+			}
+			return { valid: false, role: null, remainingMs: 0 };
+		}
+
+		function startSession(role) {
+			safeStorageSet(KEY_AUTH_ROLE, role);
+			safeStorageSet(KEY_AUTH_TIME, Date.now().toString());
+		}
+
+		function terminateSession(notify = false) {
+			safeStorageRemove(KEY_AUTH_ROLE);
+			safeStorageRemove(KEY_AUTH_TIME);
+			switchScreen("screen-lock");
+			if (notify) {
+				showToast("Session expired. Please enter password.", "error");
+			}
+		}
+
+		function updateSessionCountdown() {
+			const status = checkSessionStatus();
+			if (!status.valid) {
+				const activeScreen = document.querySelector(".view-screen.active");
+				if (activeScreen && activeScreen.id !== "screen-lock") {
+					terminateSession(true);
+				}
+				return;
+			}
+
+			const totalSec = Math.floor(status.remainingMs / 1000);
+			const hours = Math.floor(totalSec / 3600);
+			const minutes = Math.floor((totalSec % 3600) / 60);
+
+			const timerEl = document.getElementById("sessionTimerText");
+			if (timerEl) {
+				timerEl.innerText = `Valid: ${hours}h ${minutes < 10 ? '0' : ''}${minutes}m`;
+			}
+		}
+		setInterval(updateSessionCountdown, 30000);
+
+		// Auth Gate Evaluation
+		function attemptLogin() {
+			const input = document.getElementById("sitePasswordInput");
+			const card = document.getElementById("lockCardBox");
+			const val = input.value.trim();
+
+			if (!val) {
+				triggerShake(card);
+				showToast("Please enter a password", "error");
+				return;
+			}
+
+			if (val === MASTER_ADMIN_PASS) {
+				startSession("admin");
+				showToast("Welcome Master Admin! Opening Gold Console...", "gold");
+				input.value = "";
+				setTimeout(() => switchScreen("screen-admin"), 300);
+				return;
+			}
+
+			const activeUserPass = getActiveUserPassword();
+			if (val === activeUserPass) {
+				startSession("user");
+				showToast("Authenticated! Opening Farmer ID...", "success");
+				input.value = "";
+				setTimeout(() => switchScreen("screen-dashboard"), 300);
+				return;
+			}
+
+			triggerShake(card);
+			showToast("Incorrect Password! Access Denied.", "error");
+			input.select();
+		}
+
+		function triggerShake(element) {
+			element.classList.remove("shake-error");
+			void element.offsetWidth;
+			element.classList.add("shake-error");
+			setTimeout(() => element.classList.remove("shake-error"), 500);
+		}
+
+		function updateTopBar() {
+			const status = checkSessionStatus();
+			const roleBadge = document.getElementById("dashboardRoleBadge");
+			const roleText = document.getElementById("roleBadgeText");
+			const navAdminBtn = document.getElementById("btnNavToAdmin");
+
+			if (status.role === "admin") {
+				roleBadge.classList.add("admin-active");
+				roleText.innerText = "Master Admin";
+				navAdminBtn.style.display = "inline-flex";
+			} else {
+				roleBadge.classList.remove("admin-active");
+				roleText.innerText = "User Mode";
+				navAdminBtn.style.display = "none";
+			}
+			updateSessionCountdown();
+		}
+
+		let isCurrentPassMasked = true;
+		function renderAdminView() {
+			const currentPass = getActiveUserPassword();
+			const passDisplay = document.getElementById("displayCurrentPass");
+			const peekLabel = document.getElementById("peekPassLabel");
+			const peekIcon = document.getElementById("peekPassIcon");
+
+			if (isCurrentPassMasked) {
+				passDisplay.innerText = "••••••••••••";
+				peekLabel.innerText = "Show";
+				peekIcon.className = "fa-regular fa-eye";
+			} else {
+				passDisplay.innerText = currentPass;
+				peekLabel.innerText = "Hide";
+				peekIcon.className = "fa-regular fa-eye-slash";
+			}
+		}
+
+		// Card Data Handling
+		function loadCardData() {
+			const savedData = safeStorageGet(STORAGE_KEY);
+			if (savedData) {
+				try {
+					const data = JSON.parse(savedData);
+					document.getElementById('f-name').innerText = data.name || DEFAULT_DATA.name;
+					document.getElementById('f-gender').innerText = data.gender || DEFAULT_DATA.gender;
+					document.getElementById('f-dob').innerText = data.dob || DEFAULT_DATA.dob;
+					document.getElementById('f-caste').innerText = data.caste || DEFAULT_DATA.caste;
+					document.getElementById('f-aadhaar').innerText = data.aadhaar || DEFAULT_DATA.aadhaar;
+					document.getElementById('f-address').innerText = data.address || DEFAULT_DATA.address;
+					document.getElementById('f-id').innerText = data.farmerId || DEFAULT_DATA.farmerId;
+					document.getElementById('table-body').innerHTML = data.tableHTML || DEFAULT_DATA.tableHTML;
+					if (data.photoSrc) {
+						document.getElementById('profilePhoto').src = data.photoSrc;
+					}
+				} catch (e) {
+					console.error("Failed to parse card data", e);
+				}
+			}
+			bindTableDeleteButtons();
+		}
+
+		function saveCardData() {
 			const data = {
 				name: document.getElementById('f-name').innerText,
 				gender: document.getElementById('f-gender').innerText,
@@ -354,102 +1507,43 @@
 				tableHTML: document.getElementById('table-body').innerHTML,
 				photoSrc: document.getElementById('profilePhoto').src
 			};
-			localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+			safeStorageSet(STORAGE_KEY, JSON.stringify(data));
 			
-			const saveBtn = document.querySelector('.btn-save');
+			const saveBtn = document.getElementById('btnSaveCard');
 			saveBtn.innerText = "Saved";
+			showToast("Card data saved to local storage!", "success");
 			setTimeout(() => { saveBtn.innerText = "Save"; }, 1500);
 		}
 
-		function loadData() {
-			const savedData = localStorage.getItem(STORAGE_KEY);
-			if (savedData) {
-				const data = JSON.parse(savedData);
-				document.getElementById('f-name').innerText = data.name || DEFAULT_DATA.name;
-				document.getElementById('f-gender').innerText = data.gender || DEFAULT_DATA.gender;
-				document.getElementById('f-dob').innerText = data.dob || DEFAULT_DATA.dob;
-				document.getElementById('f-caste').innerText = data.caste || DEFAULT_DATA.caste;
-				document.getElementById('f-aadhaar').innerText = data.aadhaar || DEFAULT_DATA.aadhaar;
-				document.getElementById('f-address').innerText = data.address || DEFAULT_DATA.address;
-				document.getElementById('f-id').innerText = data.farmerId || DEFAULT_DATA.farmerId;
-				document.getElementById('table-body').innerHTML = data.tableHTML || DEFAULT_DATA.tableHTML;
-				document.getElementById('profilePhoto').src = data.photoSrc || DEFAULT_DATA.photoSrc;
-				
-				autoFitTable();
-				updateQRCode();
-			}
+		function resetCardData() {
+			safeStorageRemove(STORAGE_KEY);
+			document.getElementById('f-name').innerText = DEFAULT_DATA.name;
+			document.getElementById('f-gender').innerText = DEFAULT_DATA.gender;
+			document.getElementById('f-dob').innerText = DEFAULT_DATA.dob;
+			document.getElementById('f-caste').innerText = DEFAULT_DATA.caste;
+			document.getElementById('f-aadhaar').innerText = DEFAULT_DATA.aadhaar;
+			document.getElementById('f-address').innerText = DEFAULT_DATA.address;
+			document.getElementById('f-id').innerText = DEFAULT_DATA.farmerId;
+			document.getElementById('table-body').innerHTML = DEFAULT_DATA.tableHTML;
+			document.getElementById('profilePhoto').src = DEFAULT_DATA.photoSrc;
+			
+			bindTableDeleteButtons();
+			updateQRCode();
+			showToast("Card data reset to default successfully!", "normal");
 		}
 
-		function resetData() {
-			if(confirm("Are you sure you want to reset all data to default? Saved data will be lost.")) {
-				localStorage.removeItem(STORAGE_KEY);
-				document.getElementById('f-name').innerText = DEFAULT_DATA.name;
-				document.getElementById('f-gender').innerText = DEFAULT_DATA.gender;
-				document.getElementById('f-dob').innerText = DEFAULT_DATA.dob;
-				document.getElementById('f-caste').innerText = DEFAULT_DATA.caste;
-				document.getElementById('f-aadhaar').innerText = DEFAULT_DATA.aadhaar;
-				document.getElementById('f-address').innerText = DEFAULT_DATA.address;
-				document.getElementById('f-id').innerText = DEFAULT_DATA.farmerId;
-				document.getElementById('table-body').innerHTML = DEFAULT_DATA.tableHTML;
-				document.getElementById('profilePhoto').src = DEFAULT_DATA.photoSrc;
-				
-				autoFitTable();
-				updateQRCode();
-			}
-		}
-
-		// --- Utilities for Caret positioning in contenteditable ---
 		function placeCaretAtEnd(el) {
 			el.focus();
-			if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
-				let range = document.createRange();
+			if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
+				const range = document.createRange();
 				range.selectNodeContents(el);
 				range.collapse(false);
-				let sel = window.getSelection();
+				const sel = window.getSelection();
 				sel.removeAllRanges();
 				sel.addRange(range);
 			}
 		}
 
-		// --- Farmer ID Auto-Formatting (Space after every 4 digits) ---
-		document.getElementById('f-id').addEventListener('input', function(e) {
-			let val = this.innerText.replace(/[^0-9]/g, '');
-			let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
-			
-			if (this.innerText !== formatted) {
-				this.innerText = formatted;
-				placeCaretAtEnd(this);
-			}
-			updateQRCode();
-		});
-
-		// --- Global Paste Handler (Images & Plain Text) ---
-		document.addEventListener('paste', function(e) {
-			const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-			
-			for (let i = 0; i < items.length; i++) {
-				if (items[i].type.indexOf('image') !== -1) {
-					const blob = items[i].getAsFile();
-					updateProfileImage(blob);
-					e.preventDefault();
-					return;
-				}
-			}
-
-			if (e.target && (e.target.classList.contains('editable-field') || e.target.tagName === 'TD')) {
-				e.preventDefault();
-				let text = (e.clipboardData || window.clipboardData).getData('text/plain');
-				
-				// Area cell restriction: Max 4 decimal digits
-				if (e.target.classList.contains('area-cell') || e.target.cellIndex === 3) {
-					text = sanitizeAreaValue(text);
-				}
-				
-				document.execCommand('insertText', false, text);
-			}
-		});
-
-		// --- Area Decimal Limiter (Max 4 decimal places) ---
 		function sanitizeAreaValue(val) {
 			val = val.replace(/[^0-9.]/g, '');
 			const parts = val.split('.');
@@ -463,120 +1557,27 @@
 			return val;
 		}
 
-		// Monitor Area inputs strictly
-		document.getElementById('landDetailsTable').addEventListener('input', function(e) {
-			if (e.target && e.target.tagName === 'TD' && (e.target.classList.contains('area-cell') || e.target.cellIndex === 3)) {
-				let btn = e.target.querySelector('.delete-row-btn');
-				let rawText = e.target.innerText.replace('×', '').trim();
-				let sanitized = sanitizeAreaValue(rawText);
-				
-				if (rawText !== sanitized) {
-					if (btn) {
-						e.target.innerHTML = sanitized;
-						e.target.appendChild(btn);
-					} else {
-						e.target.innerText = sanitized;
-					}
-					placeCaretAtEnd(e.target);
-				}
-			}
-		});
-
-		// --- Photo Handling ---
 		function updateProfileImage(fileOrBlob) {
-			if (fileOrBlob && fileOrBlob.type.startsWith('image/')) {
+			if (fileOrBlob && fileOrBlob.type && fileOrBlob.type.startsWith('image/')) {
 				const reader = new FileReader();
 				reader.onload = function(event) {
 					document.getElementById('profilePhoto').src = event.target.result;
+					showToast("Photo updated successfully!", "success");
 				};
 				reader.readAsDataURL(fileOrBlob);
 			}
 		}
 
-		function previewImage(event) {
-			if(event.target.files && event.target.files[0]) {
-				updateProfileImage(event.target.files[0]);
-			}
+		function bindTableDeleteButtons() {
+			const buttons = document.querySelectorAll('.delete-row-btn');
+			buttons.forEach(btn => {
+				btn.onclick = function() {
+					deleteTableRow(this);
+				};
+			});
 		}
 
-		const dropZone = document.body;
-		dropZone.addEventListener('dragover', (e) => { e.preventDefault(); document.body.classList.add('dragover'); });
-		dropZone.addEventListener('dragleave', (e) => { e.preventDefault(); document.body.classList.remove('dragleave'); });
-		dropZone.addEventListener('drop', (e) => {
-			e.preventDefault();
-			document.body.classList.remove('dragover');
-			if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-				updateProfileImage(e.dataTransfer.files[0]);
-			}
-		});
-
-		// --- Table Management (Max 3 data rows + 4th summary row) ---
-		document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
-			if (e.key === 'Enter') {
-				e.preventDefault();
-				let targetCell = e.target;
-				const currentRow = targetCell.closest('tr');
-				const tbody = currentRow.parentElement;
-				const isSummaryRow = currentRow.classList.contains('summary-row');
-
-				if (isSummaryRow) {
-					return;
-				}
-
-				if (currentRow === tbody.lastElementChild) {
-					const dataRowCount = tbody.querySelectorAll('tr:not(.summary-row)').length;
-
-					if (dataRowCount < 3) {
-						const newRow = document.createElement('tr');
-						newRow.innerHTML = `
-							<td contenteditable="true"></td>
-							<td contenteditable="true"></td>
-							<td contenteditable="true"></td>
-							<td contenteditable="true" class="area-cell" style="position:relative;"></td>
-						`;
-						tbody.appendChild(newRow);
-						const lastCell = newRow.lastElementChild;
-						const delBtn = document.createElement('button');
-						delBtn.type = 'button';
-						delBtn.className = 'delete-row-btn';
-						delBtn.innerHTML = '×';
-						delBtn.title = 'Delete Row';
-						delBtn.onclick = function() { deleteRow(this); };
-						lastCell.appendChild(delBtn);
-						
-						newRow.firstElementChild.focus();
-					} else if (dataRowCount === 3 && !tbody.querySelector('.summary-row')) {
-						const sumRow = document.createElement('tr');
-						sumRow.className = 'summary-row';
-						sumRow.innerHTML = `
-							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px;">
-								Number of Lands : <span class="editable-field" contenteditable="true">4</span>
-							</td>
-							<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px; position:relative;">
-								Total Land Area : <span class="editable-field" contenteditable="true">0.0826</span>
-								<button type="button" class="delete-row-btn" onclick="deleteRow(this)" title="Delete Row">×</button>
-							</td>
-						`;
-						tbody.appendChild(sumRow);
-						sumRow.querySelector('.editable-field').focus();
-					}
-				} else {
-					const nextRow = currentRow.nextElementSibling;
-					if (nextRow.classList.contains('summary-row')) {
-						const editable = nextRow.querySelector('.editable-field');
-						if (editable) editable.focus();
-					} else {
-						const colIndex = Array.from(currentRow.children).indexOf(targetCell.tagName === 'TD' ? targetCell : targetCell.closest('td'));
-						if (nextRow.children[colIndex]) {
-							nextRow.children[colIndex].focus();
-						}
-					}
-				}
-				autoFitTable();
-			}
-		});
-
-		function deleteRow(btn) {
+		function deleteTableRow(btn) {
 			const row = btn.closest('tr');
 			const tbody = row.parentElement;
 			if (tbody.rows.length > 1) {
@@ -589,17 +1590,9 @@
 				cells[3].innerText = '';
 				cells[3].appendChild(btn);
 			}
-			autoFitTable();
 		}
 
-		function autoFitTable() {
-			const table = document.getElementById('landDetailsTable');
-			table.style.fontSize = '8pt';
-		}
-
-		// --- QR Code Management ---
 		let qrCodeInstance = null;
-
 		function getCleanText(id) {
 			const el = document.getElementById(id);
 			return el ? el.innerText.replace(/\n/g, '').trim() : "";
@@ -611,33 +1604,274 @@
 			const dob = getCleanText('f-dob');
 			const aadhaar = getCleanText('f-aadhaar').replace(/\s+/g, '');
 			const address = getCleanText('f-address');
-			const farmerIdStr = getCleanText('f-id').replace(/\s+/g, ''); 
+			const farmerIdStr = getCleanText('f-id').replace(/\s+/g, '');
 
 			const xmlString = `<?xml version="1.0"?>\n<QDB farmerId="${farmerIdStr}" AadhaarNo="${aadhaar}" Name="${name}" Dob="${dob}" Gender="${gender}" Address="${address}"/>`;
 
 			const qrContainer = document.getElementById("qrcode");
-			qrContainer.innerHTML = ""; 
+			if (!qrContainer) return;
+			qrContainer.innerHTML = "";
 
-			qrCodeInstance = new QRCode(qrContainer, {
-				text: xmlString,
-				width: 1024,
-				height: 1024,
-				colorDark : "#000000",
-				colorLight : "#ffffff",
-				correctLevel : QRCode.CorrectLevel.M 
-			});
+			if (typeof QRCode !== "undefined") {
+				qrCodeInstance = new QRCode(qrContainer, {
+					text: xmlString,
+					width: 1024,
+					height: 1024,
+					colorDark: "#000000",
+					colorLight: "#ffffff",
+					correctLevel: QRCode.CorrectLevel.M
+				});
+			}
 		}
 
-		// --- Initialization ---
-		window.addEventListener('load', () => {
-			loadData(); 
-			updateQRCode();
-		});
-
-		document.addEventListener('input', function(e) {
-			if(e.target && e.target.classList.contains('editable-field') && e.target.id !== 'f-id') {
-				updateQRCode();
+		// Initialization
+		document.addEventListener('DOMContentLoaded', () => {
+			const session = checkSessionStatus();
+			if (session.valid) {
+				if (session.role === "admin") {
+					switchScreen("screen-admin");
+				} else {
+					switchScreen("screen-dashboard");
+				}
+			} else {
+				switchScreen("screen-lock");
 			}
+
+			// Lock Screen Events
+			document.getElementById("btnUnlockSubmit").addEventListener("click", attemptLogin);
+			document.getElementById("sitePasswordInput").addEventListener("keydown", (e) => {
+				if (e.key === "Enter") attemptLogin();
+			});
+
+			document.getElementById("togglePasswordBtn").addEventListener("click", () => {
+				const passInput = document.getElementById("sitePasswordInput");
+				const toggleIcon = document.getElementById("togglePasswordIcon");
+				if (passInput.type === "password") {
+					passInput.type = "text";
+					toggleIcon.className = "fa-regular fa-eye-slash";
+				} else {
+					passInput.type = "password";
+					toggleIcon.className = "fa-regular fa-eye";
+				}
+			});
+
+			// Admin Console Events
+			document.getElementById("btnPeekCurrentPass").addEventListener("click", () => {
+				isCurrentPassMasked = !isCurrentPassMasked;
+				renderAdminView();
+			});
+
+			document.getElementById("btnCopyCurrentPass").addEventListener("click", () => {
+				const pass = getActiveUserPassword();
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(pass).then(() => {
+						showToast("Password copied to clipboard!", "gold");
+					});
+				} else {
+					showToast("Password: " + pass, "gold");
+				}
+			});
+
+			document.getElementById("btnSaveNewUserPass").addEventListener("click", () => {
+				const newPass = document.getElementById("newAdminPassInput").value.trim();
+				const confirmPass = document.getElementById("confirmAdminPassInput").value.trim();
+
+				if (!newPass) {
+					showToast("New password cannot be empty!", "error");
+					return;
+				}
+				if (newPass !== confirmPass) {
+					showToast("Passwords do not match!", "error");
+					return;
+				}
+				if (newPass === MASTER_ADMIN_PASS) {
+					showToast("Cannot be identical to master admin key!", "error");
+					return;
+				}
+
+				safeStorageSet(KEY_USER_PASS, newPass);
+				document.getElementById("newAdminPassInput").value = "";
+				document.getElementById("confirmAdminPassInput").value = "";
+				renderAdminView();
+				showToast("User password updated to: " + newPass, "gold");
+			});
+
+			document.getElementById("btnResetDefaultPass").addEventListener("click", () => {
+				safeStorageSet(KEY_USER_PASS, DEFAULT_USER_PASS);
+				renderAdminView();
+				showToast("Restored to default: Vivek@9695", "gold");
+			});
+
+			document.getElementById("btnGoToCard").addEventListener("click", () => {
+				switchScreen("screen-dashboard");
+			});
+
+			document.getElementById("btnAdminLogout").addEventListener("click", () => {
+				terminateSession();
+				showToast("Admin Terminal Locked.", "normal");
+			});
+
+			// Dashboard Events
+			document.getElementById("btnNavToAdmin").addEventListener("click", () => {
+				switchScreen("screen-admin");
+			});
+
+			document.getElementById("btnUserLogout").addEventListener("click", () => {
+				terminateSession();
+				showToast("Terminal Locked.", "normal");
+			});
+
+			document.getElementById("btnSaveCard").addEventListener("click", saveCardData);
+			document.getElementById("btnPrintCard").addEventListener("click", () => window.print());
+			
+			const resetModal = document.getElementById("confirmResetModal");
+			document.getElementById("btnResetCardPrompt").addEventListener("click", () => {
+				resetModal.style.display = "flex";
+			});
+			document.getElementById("btnCancelModalReset").addEventListener("click", () => {
+				resetModal.style.display = "none";
+			});
+			document.getElementById("btnConfirmModalReset").addEventListener("click", () => {
+				resetModal.style.display = "none";
+				resetCardData();
+			});
+
+			document.getElementById("profilePhoto").addEventListener("click", () => {
+				document.getElementById("photoUpload").click();
+			});
+			document.getElementById("photoUpload").addEventListener("change", (e) => {
+				if (e.target.files && e.target.files[0]) {
+					updateProfileImage(e.target.files[0]);
+				}
+			});
+
+			document.getElementById('f-id').addEventListener('input', function() {
+				let val = this.innerText.replace(/[^0-9]/g, '');
+				let formatted = val.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+				if (this.innerText !== formatted) {
+					this.innerText = formatted;
+					placeCaretAtEnd(this);
+				}
+				updateQRCode();
+			});
+
+			document.addEventListener('paste', function(e) {
+				const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+				for (let i = 0; i < items.length; i++) {
+					if (items[i].type.indexOf('image') !== -1) {
+						const blob = items[i].getAsFile();
+						updateProfileImage(blob);
+						e.preventDefault();
+						return;
+					}
+				}
+
+				if (e.target && (e.target.classList.contains('editable-field') || e.target.tagName === 'TD')) {
+					e.preventDefault();
+					let text = (e.clipboardData || window.clipboardData).getData('text/plain');
+					if (e.target.classList.contains('area-cell') || e.target.cellIndex === 3) {
+						text = sanitizeAreaValue(text);
+					}
+					document.execCommand('insertText', false, text);
+				}
+			});
+
+			window.addEventListener('dragover', (e) => { e.preventDefault(); document.body.classList.add('dragover'); });
+			window.addEventListener('dragleave', (e) => { e.preventDefault(); document.body.classList.remove('dragleave'); });
+			window.addEventListener('drop', (e) => {
+				e.preventDefault();
+				document.body.classList.remove('dragover');
+				if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+					updateProfileImage(e.dataTransfer.files[0]);
+				}
+			});
+
+			// Table enter & row management
+			document.getElementById('landDetailsTable').addEventListener('keydown', function(e) {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					let targetCell = e.target;
+					const currentRow = targetCell.closest('tr');
+					const tbody = currentRow.parentElement;
+					const isSummaryRow = currentRow.classList.contains('summary-row');
+
+					if (isSummaryRow) return;
+
+					if (currentRow === tbody.lastElementChild) {
+						const dataRowCount = tbody.querySelectorAll('tr:not(.summary-row)').length;
+
+						if (dataRowCount < 3) {
+							const newRow = document.createElement('tr');
+							newRow.innerHTML = `
+								<td contenteditable="true"></td>
+								<td contenteditable="true"></td>
+								<td contenteditable="true"></td>
+								<td contenteditable="true" class="area-cell" style="position:relative;"></td>
+							`;
+							tbody.appendChild(newRow);
+							const lastCell = newRow.lastElementChild;
+							const delBtn = document.createElement('button');
+							delBtn.type = 'button';
+							delBtn.className = 'delete-row-btn';
+							delBtn.innerHTML = '×';
+							delBtn.title = 'Delete Row';
+							delBtn.onclick = function() { deleteTableRow(this); };
+							lastCell.appendChild(delBtn);
+							newRow.firstElementChild.focus();
+						} else if (dataRowCount === 3 && !tbody.querySelector('.summary-row')) {
+							const sumRow = document.createElement('tr');
+							sumRow.className = 'summary-row';
+							sumRow.innerHTML = `
+								<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px;">
+									Number of Lands : <span class="editable-field" contenteditable="true">4</span>
+								</td>
+								<td colspan="2" style="font-weight:bold; text-align:left; padding-left:4px; position:relative;">
+									Total Land Area : <span class="editable-field" contenteditable="true">0.0826</span>
+									<button type="button" class="delete-row-btn" title="Delete Row">×</button>
+								</td>
+							`;
+							tbody.appendChild(sumRow);
+							sumRow.querySelector('.delete-row-btn').onclick = function() { deleteTableRow(this); };
+							sumRow.querySelector('.editable-field').focus();
+						}
+					} else {
+						const nextRow = currentRow.nextElementSibling;
+						if (nextRow.classList.contains('summary-row')) {
+							const editable = nextRow.querySelector('.editable-field');
+							if (editable) editable.focus();
+						} else {
+							const colIndex = Array.from(currentRow.children).indexOf(targetCell.tagName === 'TD' ? targetCell : targetCell.closest('td'));
+							if (nextRow.children[colIndex]) {
+								nextRow.children[colIndex].focus();
+							}
+						}
+					}
+				}
+			});
+
+			document.getElementById('landDetailsTable').addEventListener('input', function(e) {
+				if (e.target && e.target.tagName === 'TD' && (e.target.classList.contains('area-cell') || e.target.cellIndex === 3)) {
+					let btn = e.target.querySelector('.delete-row-btn');
+					let rawText = e.target.innerText.replace('×', '').trim();
+					let sanitized = sanitizeAreaValue(rawText);
+					
+					if (rawText !== sanitized) {
+						if (btn) {
+							e.target.innerHTML = sanitized;
+							e.target.appendChild(btn);
+						} else {
+							e.target.innerText = sanitized;
+						}
+						placeCaretAtEnd(e.target);
+					}
+				}
+			});
+
+			document.addEventListener('input', function(e) {
+				if (e.target && e.target.classList.contains('editable-field') && e.target.id !== 'f-id') {
+					updateQRCode();
+				}
+			});
 		});
 	</script>
 </body>
